@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'login_signup_page.dart';
-import 'home_screen.dart';
+import 'root_page.dart';
+import 'services/authentication.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,7 +15,9 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           primaryColor: Color(0xff2a7de1),
         ),
-        home: LoginSignUpPage(),
+        home: RootPage(
+          auth: Auth(),
+        ),
     );
   }
 }

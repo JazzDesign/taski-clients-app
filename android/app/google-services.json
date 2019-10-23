@@ -1,0 +1,91 @@
+{
+  "project_info": {
+    "project_number": "826007013618",
+    "firebase_url": "https://taski-a499a.firebaseio.com",
+    "project_id": "taski-a499a",
+    "storage_bucket": "taski-a499a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:826007013618:android:89bc8cb8ee33c6eb44686b",
+        "android_client_info": {
+          "package_name": "com.taski.consumer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "826007013618-6a4u7r098plhs8dan7d1n5juhhkpfle4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv63Lraax3idFTbB4rSRQyJumaentjO0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "826007013618-6a4u7r098plhs8dan7d1n5juhhkpfle4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "826007013618-qdb66e6of43a20cd1hqehpkcktuh83fo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.taski.contractor"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:826007013618:android:9b72a0594527503544686b",
+        "android_client_info": {
+          "package_name": "com.taski.contractor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "826007013618-r6kq07rthu2v7n9dcvqphr2tvrsb4hkv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.taski.contractor",
+            "certificate_hash": "690248b4644b80d90508cfe5b3057fecb93c05c4"
+          }
+        },
+        {
+          "client_id": "826007013618-6a4u7r098plhs8dan7d1n5juhhkpfle4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv63Lraax3idFTbB4rSRQyJumaentjO0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "826007013618-6a4u7r098plhs8dan7d1n5juhhkpfle4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "826007013618-qdb66e6of43a20cd1hqehpkcktuh83fo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.taski.contractor"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
