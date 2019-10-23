@@ -94,7 +94,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
                     color: Colors.white,
                     borderSide: BorderSide(color: Colors.white),
                     highlightedBorderColor: Colors.white,
-                    onPressed: () => {},
+                    onPressed: () => gotoSingUp(),
                     child: new Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 20.0,
@@ -125,6 +125,241 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
           ),
         ],
       ),
+    );
+  }
+
+  Widget singUp() {
+    return new Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: new Container(
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          image: DecorationImage(
+            colorFilter: new ColorFilter.mode(
+                Colors.black.withOpacity(0.3), BlendMode.dstATop),
+            image: AssetImage('images/bg-login.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: new Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(
+                top: 60.0,
+                bottom: 20.0,
+              ),
+              height: 160,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('images/logo-taski.png'),
+                  )
+              ),
+            ),
+            
+            new Row(
+              children: <Widget>[
+                new Expanded(
+                  child: new Padding(
+                    padding: const EdgeInsets.only(left: 40.0),
+                    child: new Text(
+                      "Nombre Completo",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 15.0,
+                        fontFamily: 'PoppinsRegular',
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            new Container(
+              width: MediaQuery.of(context).size.width,
+              margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                      color: Colors.white,
+                      width: 0.5,
+                      style: BorderStyle.solid),
+                ),
+              ),
+              padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+              child: new Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  new Expanded(
+                    child: TextField(
+                      textAlign: TextAlign.left,
+                      style : TextStyle(color: Colors.white, fontFamily: 'PoppinsRegular'),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Juan Perez',
+                        hintStyle: TextStyle(color: Colors.white70, fontFamily: 'PoppinsRegular',),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              height: 24.0,
+            ),
+            new Row(
+              children: <Widget>[
+                new Expanded(
+                  child: new Padding(
+                    padding: const EdgeInsets.only(left: 40.0),
+                    child: new Text(
+                      "Email",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 15.0,
+                        fontFamily: 'PoppinsRegular',
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            new Container(
+              width: MediaQuery.of(context).size.width,
+              margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                      color: Colors.white,
+                      width: 0.5,
+                      style: BorderStyle.solid),
+                ),
+              ),
+              padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+              child: new Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  new Expanded(
+                    child: TextField(
+                      textAlign: TextAlign.left,
+                      style : TextStyle(color: Colors.white, fontFamily: 'PoppinsRegular'),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'correo@gmail.com',
+                        hintStyle: TextStyle(color: Colors.white70, fontFamily: 'PoppinsRegular',),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              height: 24.0,
+            ),
+            new Row(
+              children: <Widget>[
+                new Expanded(
+                  child: new Padding(
+                    padding: const EdgeInsets.only(left: 40.0),
+                    child: new Text(
+                      "PASSWORD",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 15.0,
+                        fontFamily: 'PoppinsRegular',
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            new Container(
+              width: MediaQuery.of(context).size.width,
+              margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                      color: Colors.white,
+                      width: 0.5,
+                      style: BorderStyle.solid),
+                ),
+              ),
+              padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+              child: new Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  new Expanded(
+                    child: TextField(
+                      obscureText: true,
+                      textAlign: TextAlign.left,
+                      style : TextStyle(color: Colors.white, fontFamily: 'PoppinsRegular'),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: '*********',
+                        hintStyle: TextStyle(color: Colors.white70, fontFamily: 'PoppinsRegular',),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              height: 24.0,
+            ),
+            new Container(
+              width: MediaQuery.of(context).size.width,
+              margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
+              alignment: Alignment.center,
+              child: new Row(
+                children: <Widget>[
+                  new Expanded(
+                    child: new OutlineButton(
+                      shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30.0)),
+                      color: Colors.white,
+                      borderSide: BorderSide(color: Colors.white),
+                      highlightedBorderColor: Colors.white,
+                      onPressed: () => gotoMenu(),
+                      child: new Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 20.0,
+                          horizontal: 20.0,
+                        ),
+                        child: new Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            new Expanded(
+                              child: Text(
+                                "Registrarse",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'PoppinsRegular',
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+
     );
   }
 
@@ -469,6 +704,14 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
   gotoLogin() {
     //controller_0To1.forward(from: 0.0);
     _controller.animateToPage(
+      2,
+      duration: Duration(milliseconds: 600),
+      curve: Curves.easeInOutCubic,
+    );
+  }
+  gotoSingUp() {
+    //controller_0To1.forward(from: 0.0);
+    _controller.animateToPage(
       0,
       duration: Duration(milliseconds: 600),
       curve: Curves.easeInOutCubic,
@@ -477,7 +720,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
   gotoMenu() {
     //controller_0To1.forward(from: 0.0);
     _controller.animateToPage(
-      2,
+      3,
       duration: Duration(milliseconds: 600),
       curve: Curves.easeInOutCubic,
     );
@@ -514,7 +757,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
         child: PageView(
           controller: _controller,
           physics: new AlwaysScrollableScrollPhysics(),
-          children: <Widget>[loginPage(), homePage(), ClientMenu()],
+          children: <Widget>[singUp(), homePage(), loginPage(), ClientMenu()],
           scrollDirection: Axis.horizontal,
         ));
   }
