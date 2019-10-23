@@ -68,9 +68,9 @@ class _RootPageState extends State<RootPage> {
       case AuthStatus.notLoggedIn:
         return Scaffold(
           body: LoginSignUpPage(
-              /*auth: widget.auth,
-            onSignedIn: _onLoggedIn,*/
-              ),
+            auth: widget.auth,
+            onSignedIn: _onLoggedIn,
+          ),
         );
         break;
       case AuthStatus.loggedIn:
