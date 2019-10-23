@@ -30,6 +30,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: "^0.7.3"
+  search_widget: "^0.2.0"
+  timeline_list: ^0.0.3
 
 
 
@@ -84,6 +86,12 @@ flutter:
     - images/bg-login.jpg
     - images/logo-taski.png
     - images/json.jpg
+    - images/icons/paint-icon.png
+    - images/icons/repair-icon.png
+    - images/icons/luz-icon.png
+    - images/icons/carpinteria-icon.png
+    - images/icons/plomeria-icon.png
+    - images/icons/jardin-icon.png
 
   fonts:
     - family: PoppinsRegular

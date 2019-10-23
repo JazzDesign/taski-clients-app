@@ -2,20 +2,33 @@ PODS:
   - drawerbehavior (0.0.1):
     - Flutter
   - Flutter (1.0.0)
+  - keyboard_visibility (0.5.0):
+    - Flutter
+    - Reachability
+  - Reachability (3.2)
 
 DEPENDENCIES:
   - drawerbehavior (from `.symlinks/plugins/drawerbehavior/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
+  - keyboard_visibility (from `.symlinks/plugins/keyboard_visibility/ios`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Reachability
 
 EXTERNAL SOURCES:
   drawerbehavior:
     :path: ".symlinks/plugins/drawerbehavior/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
+  keyboard_visibility:
+    :path: ".symlinks/plugins/keyboard_visibility/ios"
 
 SPEC CHECKSUMS:
   drawerbehavior: 688832bffec482cabacd8db3248ba582e1c2ea92
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  keyboard_visibility: 96a24de806fe6823c3ad956c01ba2ec6d056616f
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
 
 PODFILE CHECKSUM: 10ae9c18d12c9ffc2275c9a159a3b1e281990db0
 

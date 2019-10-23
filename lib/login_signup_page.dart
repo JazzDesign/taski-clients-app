@@ -469,7 +469,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
   gotoLogin() {
     //controller_0To1.forward(from: 0.0);
     _controller.animateToPage(
-      1,
+      0,
       duration: Duration(milliseconds: 600),
       curve: Curves.easeInOutCubic,
     );
@@ -514,7 +514,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>{
         child: PageView(
           controller: _controller,
           physics: new AlwaysScrollableScrollPhysics(),
-          children: <Widget>[homePage(), loginPage(), ClientMenu()],
+          children: <Widget>[loginPage(), homePage(), ClientMenu()],
           scrollDirection: Axis.horizontal,
         ));
   }
