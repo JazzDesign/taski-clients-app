@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
+import 'client_menu.dart';
 import 'login_signup_page.dart';
 import 'services/authentication.dart';
 
@@ -76,7 +76,7 @@ class _RootPageState extends State<RootPage> {
       case AuthStatus.loggedIn:
         if (_userId.isNotEmpty && _userId != null) {
           return Scaffold(
-            body: HomeScreen(
+            body: ClientMenu(
                 /*userId: _userId,
               auth: widget.auth,
               onSignedOut: _onSignedOut,*/

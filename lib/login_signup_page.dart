@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'client_menu.dart';
 import 'services/authentication.dart';
 
 //Color taski = const Color(0x2A7DE1);
@@ -16,13 +16,21 @@ class LoginSignUpPage extends StatefulWidget {
 }
 
 class _LoginSignUpPageState extends State<LoginSignUpPage> {
-  TextEditingController _emailEditingController = TextEditingController();
-  TextEditingController _passwordEditingController = TextEditingController();
+  final _emailEditingController = TextEditingController();
+  final _passwordEditingController = TextEditingController();
 
-  String _errorMessage;
-  String _pwErrorMessage;
+  final _nameSignUpController = TextEditingController();
+  final _emailSignUpController = TextEditingController();
+  final _passwordSignUpController = TextEditingController();
+
+  String _errorMessage = "";
+  String _pwErrorMessage = "";
+  String _emailErrorMessage = "";
+  String _passwordErrorMessage = "";
+  String _nameErrorMessage = "";
 
   bool _isLoading;
+  bool _isSignUpLoading;
 
   Widget homePage() {
     return Container(
@@ -140,235 +148,283 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
   Widget singUp() {
     return new Scaffold(
       resizeToAvoidBottomInset: false,
-      body: new Container(
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          image: DecorationImage(
-            colorFilter: new ColorFilter.mode(
-                Colors.black.withOpacity(0.3), BlendMode.dstATop),
-            image: AssetImage('images/bg-login.jpg'),
-            fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: new Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            image: DecorationImage(
+              colorFilter: new ColorFilter.mode(
+                  Colors.black.withOpacity(0.3), BlendMode.dstATop),
+              image: AssetImage('images/bg-login.jpg'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: new Column(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(
-                top: 60.0,
-                bottom: 20.0,
-              ),
-              height: 160,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('images/logo-taski.png'),
-                  )
-              ),
-            ),
-            
-            new Row(
-              children: <Widget>[
-                new Expanded(
-                  child: new Padding(
-                    padding: const EdgeInsets.only(left: 40.0),
-                    child: new Text(
-                      "Nombre Completo",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 15.0,
-                        fontFamily: 'PoppinsRegular',
-                      ),
-                    ),
-                  ),
+          child: new Column(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(
+                  top: 60.0,
+                  bottom: 20.0,
                 ),
-              ],
-            ),
-            new Container(
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                      color: Colors.white,
-                      width: 0.5,
-                      style: BorderStyle.solid),
-                ),
+                height: 160,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                  image: AssetImage('images/logo-taski.png'),
+                )),
               ),
-              padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-              child: new Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
+              new Row(
                 children: <Widget>[
                   new Expanded(
-                    child: TextField(
-                      textAlign: TextAlign.left,
-                      style : TextStyle(color: Colors.white, fontFamily: 'PoppinsRegular'),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Juan Perez',
-                        hintStyle: TextStyle(color: Colors.white70, fontFamily: 'PoppinsRegular',),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(
-              height: 24.0,
-            ),
-            new Row(
-              children: <Widget>[
-                new Expanded(
-                  child: new Padding(
-                    padding: const EdgeInsets.only(left: 40.0),
-                    child: new Text(
-                      "Email",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 15.0,
-                        fontFamily: 'PoppinsRegular',
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            new Container(
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                      color: Colors.white,
-                      width: 0.5,
-                      style: BorderStyle.solid),
-                ),
-              ),
-              padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-              child: new Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  new Expanded(
-                    child: TextField(
-                      textAlign: TextAlign.left,
-                      style : TextStyle(color: Colors.white, fontFamily: 'PoppinsRegular'),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'correo@gmail.com',
-                        hintStyle: TextStyle(color: Colors.white70, fontFamily: 'PoppinsRegular',),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(
-              height: 24.0,
-            ),
-            new Row(
-              children: <Widget>[
-                new Expanded(
-                  child: new Padding(
-                    padding: const EdgeInsets.only(left: 40.0),
-                    child: new Text(
-                      "PASSWORD",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 15.0,
-                        fontFamily: 'PoppinsRegular',
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            new Container(
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                      color: Colors.white,
-                      width: 0.5,
-                      style: BorderStyle.solid),
-                ),
-              ),
-              padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-              child: new Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  new Expanded(
-                    child: TextField(
-                      obscureText: true,
-                      textAlign: TextAlign.left,
-                      style : TextStyle(color: Colors.white, fontFamily: 'PoppinsRegular'),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: '*********',
-                        hintStyle: TextStyle(color: Colors.white70, fontFamily: 'PoppinsRegular',),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(
-              height: 24.0,
-            ),
-            new Container(
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
-              alignment: Alignment.center,
-              child: new Row(
-                children: <Widget>[
-                  new Expanded(
-                    child: new OutlineButton(
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      color: Colors.white,
-                      borderSide: BorderSide(color: Colors.white),
-                      highlightedBorderColor: Colors.white,
-                      onPressed: () => gotoMenu(),
-                      child: new Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 20.0,
-                          horizontal: 20.0,
+                    child: new Padding(
+                      padding: const EdgeInsets.only(left: 40.0),
+                      child: new Text(
+                        "Nombre Completo",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 15.0,
+                          fontFamily: 'PoppinsRegular',
                         ),
-                        child: new Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            new Expanded(
-                              child: Text(
-                                "Registrarse",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'PoppinsRegular',
-                                  fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              new Container(
+                width: MediaQuery.of(context).size.width,
+                margin:
+                    const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                        color: Colors.white,
+                        width: 0.5,
+                        style: BorderStyle.solid),
+                  ),
+                ),
+                padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+                child: new Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    new Expanded(
+                      child: TextField(
+                          textAlign: TextAlign.left,
+                          controller: _nameSignUpController,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'PoppinsRegular'),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Juan Perez',
+                            errorText: _nameErrorMessage.isEmpty
+                                ? null
+                                : _nameErrorMessage,
+                            hintStyle: TextStyle(
+                              color: Colors.white70,
+                              fontFamily: 'PoppinsRegular',
+                            ),
+                          ),
+                          onChanged: (str) {
+                            _nameErrorMessage = "";
+                          }),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(
+                height: 24.0,
+              ),
+              new Row(
+                children: <Widget>[
+                  new Expanded(
+                    child: new Padding(
+                      padding: const EdgeInsets.only(left: 40.0),
+                      child: new Text(
+                        "Email",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 15.0,
+                          fontFamily: 'PoppinsRegular',
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              new Container(
+                width: MediaQuery.of(context).size.width,
+                margin:
+                    const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                        color: Colors.white,
+                        width: 0.5,
+                        style: BorderStyle.solid),
+                  ),
+                ),
+                padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+                child: new Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    new Expanded(
+                      child: TextField(
+                          textAlign: TextAlign.left,
+                          controller: _emailSignUpController,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'PoppinsRegular'),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            errorText: _emailErrorMessage.isEmpty
+                                ? null
+                                : _emailErrorMessage,
+                            hintText: 'correo@gmail.com',
+                            hintStyle: TextStyle(
+                              color: Colors.white70,
+                              fontFamily: 'PoppinsRegular',
+                            ),
+                          ),
+                          onChanged: (str) {
+                            _emailErrorMessage = "";
+                          }),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(
+                height: 24.0,
+              ),
+              new Row(
+                children: <Widget>[
+                  new Expanded(
+                    child: new Padding(
+                      padding: const EdgeInsets.only(left: 40.0),
+                      child: new Text(
+                        "PASSWORD",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 15.0,
+                          fontFamily: 'PoppinsRegular',
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              new Container(
+                width: MediaQuery.of(context).size.width,
+                margin:
+                    const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                        color: Colors.white,
+                        width: 0.5,
+                        style: BorderStyle.solid),
+                  ),
+                ),
+                padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+                child: new Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    new Expanded(
+                      child: TextField(
+                          obscureText: true,
+                          textAlign: TextAlign.left,
+                          controller: _passwordSignUpController,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'PoppinsRegular'),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: '*********',
+                            errorText: _passwordErrorMessage.isEmpty
+                                ? null
+                                : _passwordErrorMessage,
+                            hintStyle: TextStyle(
+                              color: Colors.white70,
+                              fontFamily: 'PoppinsRegular',
+                            ),
+                          ),
+                          onChanged: (str) {
+                            _passwordErrorMessage = "";
+                          }),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(
+                height: 8.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  child: _isSignUpLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : SizedBox(),
+                ),
+              ),
+              new Container(
+                width: MediaQuery.of(context).size.width,
+                margin:
+                    const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
+                alignment: Alignment.center,
+                child: new Row(
+                  children: <Widget>[
+                    new Expanded(
+                      child: new OutlineButton(
+                        shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0)),
+                        color: Colors.white,
+                        borderSide: BorderSide(color: Colors.white),
+                        highlightedBorderColor: Colors.white,
+                        onPressed: () {
+                          _validateAndSubmitSignUp(context);
+                        },
+                        child: new Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 20.0,
+                            horizontal: 20.0,
+                          ),
+                          child: new Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              new Expanded(
+                                child: Text(
+                                  "Registrarse",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'PoppinsRegular',
+                                    fontSize: 18.0,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-
     );
   }
 
@@ -749,19 +805,11 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
       curve: Curves.easeInOutCubic,
     );
   }
+
   gotoSingUp() {
     //controller_0To1.forward(from: 0.0);
     _controller.animateToPage(
       0,
-      duration: Duration(milliseconds: 600),
-      curve: Curves.easeInOutCubic,
-    );
-  }
-
-  gotoMenu() {
-    //controller_0To1.forward(from: 0.0);
-    _controller.animateToPage(
-      3,
       duration: Duration(milliseconds: 600),
       curve: Curves.easeInOutCubic,
     );
@@ -773,9 +821,13 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
   @override
   void initState() {
     _isLoading = false;
+    _isSignUpLoading = false;
 
     _errorMessage = "";
     _pwErrorMessage = "";
+    _emailErrorMessage = "";
+    _passwordErrorMessage = "";
+    _nameErrorMessage = "";
     super.initState();
   }
 
@@ -783,32 +835,10 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
   Widget build(BuildContext context) {
     return Container(
         height: MediaQuery.of(context).size.height,
-//      child: new GestureDetector(
-//        onHorizontalDragStart: _onHorizontalDragStart,
-//        onHorizontalDragUpdate: _onHorizontalDragUpdate,
-//        onHorizontalDragEnd: _onHorizontalDragEnd,
-//        behavior: HitTestBehavior.translucent,
-//        child: Stack(
-//          children: <Widget>[
-//            new FractionalTranslation(
-//              translation: Offset(-1 - (scrollPercent / (1 / numCards)), 0.0),
-//              child: SignupPage(),
-//            ),
-//            new FractionalTranslation(
-//              translation: Offset(0 - (scrollPercent / (1 / numCards)), 0.0),
-//              child: HomePage(),
-//            ),
-//            new FractionalTranslation(
-//              translation: Offset(1 - (scrollPercent / (1 / numCards)), 0.0),
-//              child: LoginPage(),
-//            ),
-//          ],
-//        ),
-//      ),
         child: PageView(
           controller: _controller,
           physics: new AlwaysScrollableScrollPhysics(),
-          children: <Widget>[singUp(), homePage(), loginPage(), ClientMenu()],
+          children: <Widget>[singUp(), homePage(), loginPage()],
           scrollDirection: Axis.horizontal,
         ));
   }
@@ -949,5 +979,121 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
         _isLoading = false;
       });
     }
+  }
+
+  // Check if form is valid before perform login or signup
+  bool _validateAndSaveSignUp() {
+    if (_nameSignUpController.value.text == null ||
+        _nameSignUpController.value.text.isEmpty) {
+      _nameErrorMessage = "Ingresa tu nombre";
+      return false;
+    }
+    if (_emailSignUpController.value.text == null ||
+        _emailSignUpController.value.text.isEmpty) {
+      _emailErrorMessage = "Ingresa tu correo electronico";
+      return false;
+    }
+    if (_passwordSignUpController.value.text == null ||
+        _passwordSignUpController.value.text.isEmpty) {
+      _passwordErrorMessage = "Ingresa tu contraseña";
+      return false;
+    }
+    return true;
+  }
+
+  // Perform login or signup
+  Future<void> _validateAndSubmitSignUp(BuildContext context) async {
+    setState(() {
+      _nameErrorMessage = "";
+      _emailErrorMessage = "";
+      _passwordErrorMessage = "";
+      _isSignUpLoading = true;
+    });
+    if (_validateAndSaveSignUp()) {
+      print("signing up");
+      String userId = "";
+      try {
+        userId = await widget.auth.signUp(_emailSignUpController.value.text,
+            _passwordSignUpController.value.text);
+
+        FirebaseUser user = await widget.auth.getCurrentUser();
+        UserUpdateInfo userInfo = UserUpdateInfo();
+        userInfo.displayName = _nameSignUpController.text.toString();
+        await user.updateProfile(userInfo);
+
+        await Firestore.instance.collection("users").document(userId).setData({
+          'name': userInfo.displayName,
+          'email': user.email,
+          'userType': 'consumer'
+        });
+
+        await widget.auth.sendEmailVerification();
+
+        print('Signed in: $userId');
+
+        await widget.auth.signOut();
+
+        setState(() {
+          _isSignUpLoading = false;
+        });
+
+        await _showConfirmation(context);
+
+        Navigator.of(context).pop();
+      } catch (e) {
+        print('Error: $e');
+        setState(() {
+          print(e.code);
+          switch (e.code as String) {
+            case 'ERROR_EMAIL_ALREADY_IN_USE':
+              _emailErrorMessage = "Este correo ya existe";
+              break;
+            case 'ERROR_INVALID_EMAIL':
+              _emailErrorMessage = "Correo con mal formato";
+              break;
+          }
+          _isSignUpLoading = false;
+        });
+      }
+    } else {
+      print("Error");
+      setState(() {
+        _isSignUpLoading = false;
+      });
+    }
+  }
+
+  Future<void> _showConfirmation(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            'Valida tu cuenta',
+            style: TextStyle(color: Colors.black),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Hemos enviado un email a tu correo.',
+                  style: TextStyle(color: Colors.black),
+                ),
+                Text(
+                  'Haz click el link en el correo para validar tu cuenta.',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Entendido'),
+              onPressed: () {},
+            ),
+          ],
+        );
+      },
+    );
   }
 }
