@@ -127,7 +127,7 @@ class _ProveedoresListState extends State<ProveedoresList> {
       onTap: () {
         print("Selecciono un proveedor");
         Firestore.instance.collection("users/${document.documentID}/jobs").add({
-          'description': widget._description,
+          'title': widget._description,
           'state': 'PENDING',
           'address': widget._address,
           'scheduled': widget._date

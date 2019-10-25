@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:drawerbehavior/drawerbehavior.dart';
 import 'package:flutter/material.dart';
 import 'package:taski_clients/service_description.dart';
@@ -8,11 +9,13 @@ import 'reservas_client.dart';
 import 'category_client.dart';
 
 class ClientMenu extends StatefulWidget {
+  final String _userId;
+
+  ClientMenu(this._userId);
+
   @override
   _ClientMenuState createState() => _ClientMenuState();
 }
-
-
 
 final List<String> _listViewData = [
   "Plomería",
@@ -63,8 +66,7 @@ final List<TimelineModel> items = [
   TimelineModel(
       Card(
         margin: EdgeInsets.symmetric(vertical: 16.0),
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -83,8 +85,7 @@ final List<TimelineModel> items = [
   TimelineModel(
       Card(
         margin: EdgeInsets.symmetric(vertical: 16.0),
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -103,8 +104,7 @@ final List<TimelineModel> items = [
   TimelineModel(
       Card(
         margin: EdgeInsets.symmetric(vertical: 16.0),
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -164,10 +164,13 @@ class _ClientMenuState extends State<ClientMenu> {
   );
 
   var selectedMenuItemId = 'home';
+  DocumentSnapshot user;
+  String userName = "";
+  String userEmail = "";
 
-  Widget _widget = CategoryClient();
+  Widget _widget = CategoryClient("", "");
 
-  Widget headerView(BuildContext context) {
+  Widget headerView(DocumentSnapshot user, BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
@@ -190,14 +193,14 @@ class _ClientMenuState extends State<ClientMenu> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "JsonChicas",
+                        user != null ? user['name'] : "",
                         style: TextStyle(
                             fontFamily: 'PoppinsRegular',
                             fontWeight: FontWeight.bold,
                             fontSize: 24),
                       ),
                       Text(
-                        "rabelyj@gmail.com",
+                        user != null ? user['email'] : "",
                         style: TextStyle(
                             fontFamily: 'PoppinsRegular',
                             fontWeight: FontWeight.normal,
@@ -213,8 +216,27 @@ class _ClientMenuState extends State<ClientMenu> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Firestore.instance
+        .collection("users")
+        .document(widget._userId)
+        .snapshots()
+        .listen((document) {
+      setState(() {
+        user = document;
+        userName = document['name'];
+        userEmail = document['email'];
+        _widget = CategoryClient(userName, userEmail);
+        print("name = $userName");
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return new DrawerScaffold(
+    return user != null? new DrawerScaffold(
         percentage: 0.6,
         appBar: AppBarProps(
             title: Text(
@@ -229,14 +251,14 @@ class _ClientMenuState extends State<ClientMenu> {
             ]),
         menuView: new MenuView(
           menu: menu,
-          headerView: headerView(context),
+          headerView: headerView(user, context),
           animation: true,
           color: Colors.white,
           selectedItemId: selectedMenuItemId,
           onMenuItemSelected: (String itemId) {
             selectedMenuItemId = itemId;
             if (itemId == 'home') {
-              setState(() => _widget = CategoryClient());
+              setState(() => _widget = CategoryClient(userName, userEmail));
               // Navigator.pushNamed(context, '/home');
             } else if (itemId == 'reservas') {
               setState(() => _widget = ReservasClient());
@@ -244,10 +266,10 @@ class _ClientMenuState extends State<ClientMenu> {
           },
         ),
         contentView: Screen(
-          contentBuilder: (context) => Scaffold(
-            body: _widget,
-          ),
-          color: Colors.white,
-        ));
+                contentBuilder: (context) => Scaffold(
+                  body: _widget,
+                ),
+                color: Colors.white,
+              )) : Container();
   }
 }

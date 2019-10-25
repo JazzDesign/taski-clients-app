@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 import 'service_description.dart';
 
 class CategoryClient extends StatefulWidget {
+  final String _userName;
+  final String _userEmail;
+
+  CategoryClient(this._userName, this._userEmail);
+
   //Cambiar por data que venga de Firebase
   @override
   _CategoryClientState createState() => _CategoryClientState();
 }
 
 class _CategoryClientState extends State<CategoryClient> {
-  String clientName = "Json";
+  String clientName = "";
 
   List<DocumentSnapshot> categories = [];
 
@@ -23,6 +28,8 @@ class _CategoryClientState extends State<CategoryClient> {
         categories = snapshot.documents;
       });
     });
+
+    clientName = widget._userName;
   }
 
   @override

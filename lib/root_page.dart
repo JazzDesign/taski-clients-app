@@ -77,10 +77,10 @@ class _RootPageState extends State<RootPage> {
         if (_userId.isNotEmpty && _userId != null) {
           return Scaffold(
             body: ClientMenu(
-                /*userId: _userId,
-              auth: widget.auth,
+              _userId,
+              /*auth: widget.auth,
               onSignedOut: _onSignedOut,*/
-                ),
+            ),
           );
         } else {
           return _buildWaitingScreen();
