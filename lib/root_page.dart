@@ -78,8 +78,8 @@ class _RootPageState extends State<RootPage> {
           return Scaffold(
             body: ClientMenu(
               _userId,
-              /*auth: widget.auth,
-              onSignedOut: _onSignedOut,*/
+              auth: widget.auth,
+              onSignedOut: _onSignedOut,
             ),
           );
         } else {

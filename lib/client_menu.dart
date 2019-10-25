@@ -7,11 +7,14 @@ import 'package:timeline_list/timeline_model.dart';
 import 'service_description.dart';
 import 'reservas_client.dart';
 import 'category_client.dart';
+import 'services/authentication.dart';
 
 class ClientMenu extends StatefulWidget {
   final String _userId;
+  final VoidCallback onSignedOut;
+  final BaseAuth auth;
 
-  ClientMenu(this._userId);
+  ClientMenu(this._userId, this.auth, this.onSignedOut);
 
   @override
   _ClientMenuState createState() => _ClientMenuState();
@@ -236,40 +239,46 @@ class _ClientMenuState extends State<ClientMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return user != null? new DrawerScaffold(
-        percentage: 0.6,
-        appBar: AppBarProps(
-            title: Text(
-              "Taski",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontFamily: "PoppinsRegular",
-              ),
-            ),
-            actions: [
-              IconButton(icon: Icon(Icons.notifications_none), onPressed: () {})
-            ]),
-        menuView: new MenuView(
-          menu: menu,
-          headerView: headerView(user, context),
-          animation: true,
-          color: Colors.white,
-          selectedItemId: selectedMenuItemId,
-          onMenuItemSelected: (String itemId) {
-            selectedMenuItemId = itemId;
-            if (itemId == 'home') {
-              setState(() => _widget = CategoryClient(userName, userEmail));
-              // Navigator.pushNamed(context, '/home');
-            } else if (itemId == 'reservas') {
-              setState(() => _widget = ReservasClient());
-            }
-          },
-        ),
-        contentView: Screen(
-                contentBuilder: (context) => Scaffold(
-                  body: _widget,
+    return user != null
+        ? new DrawerScaffold(
+            percentage: 0.6,
+            appBar: AppBarProps(
+                title: Text(
+                  "Taski",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "PoppinsRegular",
+                  ),
                 ),
-                color: Colors.white,
-              )) : Container();
+                actions: [
+                  IconButton(
+                      icon: Icon(Icons.notifications_none), onPressed: () {})
+                ]),
+            menuView: new MenuView(
+              menu: menu,
+              headerView: headerView(user, context),
+              animation: true,
+              color: Colors.white,
+              selectedItemId: selectedMenuItemId,
+              onMenuItemSelected: (String itemId) {
+                selectedMenuItemId = itemId;
+                if (itemId == 'home') {
+                  setState(() => _widget = CategoryClient(userName, userEmail));
+                  // Navigator.pushNamed(context, '/home');
+                } else if (itemId == 'reservas') {
+                  setState(() => _widget = ReservasClient());
+                } else if (itemId == 'logout') {
+                  widget.auth.signOut();
+                  widget.onSignedOut();
+                }
+              },
+            ),
+            contentView: Screen(
+              contentBuilder: (context) => Scaffold(
+                body: _widget,
+              ),
+              color: Colors.white,
+            ))
+        : Container();
   }
 }
