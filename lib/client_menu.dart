@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:taski_clients/service_description.dart';
 import 'package:timeline_list/timeline.dart';
 import 'package:timeline_list/timeline_model.dart';
-import 'proveedores_list.dart';
 import 'service_description.dart';
 
 class ClientMenu extends StatefulWidget {
@@ -11,6 +10,7 @@ class ClientMenu extends StatefulWidget {
   _ClientMenuState createState() => _ClientMenuState();
 }
 
+//Cambiar por data que venga de Firebase
 String clientName = "Json";
 
 final List<String> _listViewData = [
@@ -20,29 +20,107 @@ final List<String> _listViewData = [
   "Pintura",
 ];
 
-
 final List<TimelineModel> items = [
-      TimelineModel(Placeholder(),
-          position: TimelineItemPosition.random,
-          iconBackground: Colors.redAccent,
-          icon: Icon(Icons.blur_circular)),
-      TimelineModel(Placeholder(),
-          position: TimelineItemPosition.random,
-          iconBackground: Colors.redAccent,
-          icon: Icon(Icons.blur_circular)),
-      TimelineModel(Placeholder(),
-          position: TimelineItemPosition.random,
-          iconBackground: Colors.redAccent,
-          icon: Icon(Icons.blur_circular)),
-      TimelineModel(Placeholder(),
-          position: TimelineItemPosition.random,
-          iconBackground: Colors.redAccent,
-          icon: Icon(Icons.blur_circular)),
-      TimelineModel(Placeholder(),
-          position: TimelineItemPosition.random,
-          iconBackground: Colors.redAccent,
-          icon: Icon(Icons.blur_circular)),
-    ];
+  TimelineModel(
+      Card(
+        margin: EdgeInsets.symmetric(vertical: 16.0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              Text("Reservacion 1"),
+            ],
+          ),
+        ),
+      ),
+      position: TimelineItemPosition.random,
+      iconBackground: Color(0xff2a7de1),
+      icon: Icon(
+        Icons.check_circle,
+        color: Colors.white,
+      )),
+  TimelineModel(
+      Card(
+        margin: EdgeInsets.symmetric(vertical: 16.0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              Text("Reservacion 2"),
+            ],
+          ),
+        ),
+      ),
+      position: TimelineItemPosition.random,
+      iconBackground: Color(0xff2a7de1),
+      icon: Icon(
+        Icons.check_circle,
+        color: Colors.white,
+      )),
+  TimelineModel(
+      Card(
+        margin: EdgeInsets.symmetric(vertical: 16.0),
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              Text("Reservacion 3"),
+            ],
+          ),
+        ),
+      ),
+      position: TimelineItemPosition.random,
+      iconBackground: Color(0xff2a7de1),
+      icon: Icon(
+        Icons.check_circle,
+        color: Colors.white,
+      )),
+  TimelineModel(
+      Card(
+        margin: EdgeInsets.symmetric(vertical: 16.0),
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              Text("Reservacion 4"),
+            ],
+          ),
+        ),
+      ),
+      position: TimelineItemPosition.random,
+      iconBackground: Color(0xff2a7de1),
+      icon: Icon(
+        Icons.check_circle,
+        color: Colors.white,
+      )),
+  TimelineModel(
+      Card(
+        margin: EdgeInsets.symmetric(vertical: 16.0),
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              Text("Reservacion 5"),
+            ],
+          ),
+        ),
+      ),
+      position: TimelineItemPosition.random,
+      iconBackground: Color(0xff2a7de1),
+      icon: Icon(
+        Icons.check_circle,
+        color: Colors.white,
+      )),
+];
+
 class _ClientMenuState extends State<ClientMenu> {
   final menu = new Menu(
     items: [
@@ -86,22 +164,33 @@ class _ClientMenuState extends State<ClientMenu> {
 
   var selectedMenuItemId = 'reservas';
 
-
-  var _reservas = Center(
-    child: Timeline(children: items, position: TimelinePosition.Left) ,
+  final reservas = Column(
+    children: <Widget>[
+      Container(
+        margin: EdgeInsets.only(top: 30.0, right: 20.0, left: 20.0),
+        child: Text(
+          "Mis Reservaciones",
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            fontSize: 40.0,
+            fontFamily: "PoppinsRegular",
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Expanded(
+        child: Timeline(children: items, position: TimelinePosition.Left),
+      )
+    ],
   );
+
 
   Widget homePage() {
     return Wrap(
       children: <Widget>[
-
         //TODO : Implementar shape de decoracion
         Container(
-          margin: EdgeInsets.only(
-              top: 30.0,
-              right: 20.0,
-              left: 20.0
-          ),
+          margin: EdgeInsets.only(top: 30.0, right: 20.0, left: 20.0),
           child: Text(
             "Hola, $clientName",
             textAlign: TextAlign.left,
@@ -113,11 +202,7 @@ class _ClientMenuState extends State<ClientMenu> {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(
-              top: 50.0,
-              left: 20.0,
-              right: 20.0
-          ),
+          margin: EdgeInsets.only(top: 50.0, left: 20.0, right: 20.0),
 //        width: 100.0,
           child: Text(
             "Nuestros \nTaski Servicios",
@@ -127,15 +212,10 @@ class _ClientMenuState extends State<ClientMenu> {
               fontFamily: "PoppinsRegular",
               fontWeight: FontWeight.bold,
             ),
-
           ),
         ),
         Container(
-            margin: EdgeInsets.only(
-                top: 30.0,
-                right: 10.0,
-                left: 10.0
-            ),
+            margin: EdgeInsets.only(top: 30.0, right: 10.0, left: 10.0),
             height: 400.0,
             child: GridView.count(
               primary: false,
@@ -145,12 +225,13 @@ class _ClientMenuState extends State<ClientMenu> {
               crossAxisCount: 3,
               children: <Widget>[
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     print("Se hizo Click en Pintura");
                     Navigator.push(
                       context,
 //                      MaterialPageRoute(builder: (context) => ProveedoresList()),
-                      MaterialPageRoute(builder: (context) => ServiceDescription()),
+                      MaterialPageRoute(
+                          builder: (context) => ServiceDescription()),
                     );
                   },
                   child: Container(
@@ -158,78 +239,93 @@ class _ClientMenuState extends State<ClientMenu> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(11),
                           boxShadow: [
-                            BoxShadow(offset: Offset(0.0, 2.0), blurRadius: 1.0, spreadRadius: -1.0, color: Color(0x33000000)),
-                            BoxShadow(offset: Offset(0.0, 1.0), blurRadius: 1.0, spreadRadius: 0.0, color: Color(0x33000000)),
-                            BoxShadow(offset: Offset(0.0, 1.0), blurRadius: 3.0, spreadRadius: 0.0, color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 2.0),
+                                blurRadius: 1.0,
+                                spreadRadius: -1.0,
+                                color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 1.0),
+                                blurRadius: 1.0,
+                                spreadRadius: 0.0,
+                                color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 1.0),
+                                blurRadius: 3.0,
+                                spreadRadius: 0.0,
+                                color: Color(0x33000000)),
                           ]),
                       padding: const EdgeInsets.all(8),
-                      child: Column(children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: 10.0,
-                              bottom: 5.0
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(top: 10.0, bottom: 5.0),
+                            width: 64.0,
+                            height: 64.0,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage(
+                                        "images/icons/paint-icon.png"))),
                           ),
-                          width: 64.0,
-                          height: 64.0,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage("images/icons/paint-icon.png")
-                              )
+                          Text(
+                            'Pintura',
+                            style: TextStyle(
+                                fontFamily: "PoppinsRegular",
+                                fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        Text(
-                          'Pintura',
-                          style: TextStyle(
-                              fontFamily: "PoppinsRegular",
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      ],)
-                  ),
+                        ],
+                      )),
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     print("Se hizo Click en Reparaciones");
-
                   },
                   child: Container(
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(11),
                           boxShadow: [
-                            BoxShadow(offset: Offset(0.0, 2.0), blurRadius: 1.0, spreadRadius: -1.0, color: Color(0x33000000)),
-                            BoxShadow(offset: Offset(0.0, 1.0), blurRadius: 1.0, spreadRadius: 0.0, color: Color(0x33000000)),
-                            BoxShadow(offset: Offset(0.0, 1.0), blurRadius: 3.0, spreadRadius: 0.0, color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 2.0),
+                                blurRadius: 1.0,
+                                spreadRadius: -1.0,
+                                color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 1.0),
+                                blurRadius: 1.0,
+                                spreadRadius: 0.0,
+                                color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 1.0),
+                                blurRadius: 3.0,
+                                spreadRadius: 0.0,
+                                color: Color(0x33000000)),
                           ]),
                       padding: const EdgeInsets.all(8),
-                      child: Column(children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: 10.0,
-                              bottom: 5.0
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(top: 10.0, bottom: 5.0),
+                            width: 64.0,
+                            height: 64.0,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage(
+                                        "images/icons/repair-icon.png"))),
                           ),
-                          width: 64.0,
-                          height: 64.0,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage("images/icons/repair-icon.png")
-                              )
+                          Text(
+                            'Reparaciones',
+                            style: TextStyle(
+                                fontFamily: "PoppinsRegular",
+                                fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        Text(
-                          'Reparaciones',
-                          style: TextStyle(
-                              fontFamily: "PoppinsRegular",
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      ],)
-                  ),
+                        ],
+                      )),
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     print("Se hizo Click en Electricidad");
                   },
                   child: Container(
@@ -237,38 +333,45 @@ class _ClientMenuState extends State<ClientMenu> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(11),
                           boxShadow: [
-                            BoxShadow(offset: Offset(0.0, 2.0), blurRadius: 1.0, spreadRadius: -1.0, color: Color(0x33000000)),
-                            BoxShadow(offset: Offset(0.0, 1.0), blurRadius: 1.0, spreadRadius: 0.0, color: Color(0x33000000)),
-                            BoxShadow(offset: Offset(0.0, 1.0), blurRadius: 3.0, spreadRadius: 0.0, color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 2.0),
+                                blurRadius: 1.0,
+                                spreadRadius: -1.0,
+                                color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 1.0),
+                                blurRadius: 1.0,
+                                spreadRadius: 0.0,
+                                color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 1.0),
+                                blurRadius: 3.0,
+                                spreadRadius: 0.0,
+                                color: Color(0x33000000)),
                           ]),
                       padding: const EdgeInsets.all(8),
-                      child: Column(children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: 10.0,
-                              bottom: 5.0
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(top: 10.0, bottom: 5.0),
+                            width: 64.0,
+                            height: 64.0,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        "images/icons/luz-icon.png"))),
                           ),
-                          width: 64.0,
-                          height: 64.0,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-
-                                  image: AssetImage("images/icons/luz-icon.png")
-                              )
+                          Text(
+                            'Electricidad',
+                            style: TextStyle(
+                                fontFamily: "PoppinsRegular",
+                                fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        Text(
-                          'Electricidad',
-                          style: TextStyle(
-                              fontFamily: "PoppinsRegular",
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      ],)
-                  ),
+                        ],
+                      )),
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     print("Se hizo Click en Carpintería");
                   },
                   child: Container(
@@ -276,37 +379,45 @@ class _ClientMenuState extends State<ClientMenu> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(11),
                           boxShadow: [
-                            BoxShadow(offset: Offset(0.0, 2.0), blurRadius: 1.0, spreadRadius: -1.0, color: Color(0x33000000)),
-                            BoxShadow(offset: Offset(0.0, 1.0), blurRadius: 1.0, spreadRadius: 0.0, color: Color(0x33000000)),
-                            BoxShadow(offset: Offset(0.0, 1.0), blurRadius: 3.0, spreadRadius: 0.0, color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 2.0),
+                                blurRadius: 1.0,
+                                spreadRadius: -1.0,
+                                color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 1.0),
+                                blurRadius: 1.0,
+                                spreadRadius: 0.0,
+                                color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 1.0),
+                                blurRadius: 3.0,
+                                spreadRadius: 0.0,
+                                color: Color(0x33000000)),
                           ]),
                       padding: const EdgeInsets.all(8),
-                      child: Column(children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: 10.0,
-                              bottom: 5.0
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(top: 10.0, bottom: 5.0),
+                            width: 64.0,
+                            height: 64.0,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        "images/icons/carpinteria-icon.png"))),
                           ),
-                          width: 64.0,
-                          height: 64.0,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage("images/icons/carpinteria-icon.png")
-                              )
+                          Text(
+                            'Carpintería',
+                            style: TextStyle(
+                                fontFamily: "PoppinsRegular",
+                                fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        Text(
-                          'Carpintería',
-                          style: TextStyle(
-                              fontFamily: "PoppinsRegular",
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      ],)
-                  ),
+                        ],
+                      )),
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     print("Se hizo Click en Plomería");
                   },
                   child: Container(
@@ -314,38 +425,46 @@ class _ClientMenuState extends State<ClientMenu> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(11),
                           boxShadow: [
-                            BoxShadow(offset: Offset(0.0, 2.0), blurRadius: 1.0, spreadRadius: -1.0, color: Color(0x33000000)),
-                            BoxShadow(offset: Offset(0.0, 1.0), blurRadius: 1.0, spreadRadius: 0.0, color: Color(0x33000000)),
-                            BoxShadow(offset: Offset(0.0, 1.0), blurRadius: 3.0, spreadRadius: 0.0, color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 2.0),
+                                blurRadius: 1.0,
+                                spreadRadius: -1.0,
+                                color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 1.0),
+                                blurRadius: 1.0,
+                                spreadRadius: 0.0,
+                                color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 1.0),
+                                blurRadius: 3.0,
+                                spreadRadius: 0.0,
+                                color: Color(0x33000000)),
                           ]),
                       padding: const EdgeInsets.all(8),
-                      child: Column(children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: 10.0,
-                              bottom: 5.0
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(top: 10.0, bottom: 5.0),
+                            width: 64.0,
+                            height: 64.0,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage(
+                                        "images/icons/plomeria-icon.png"))),
                           ),
-                          width: 64.0,
-                          height: 64.0,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage("images/icons/plomeria-icon.png")
-                              )
+                          Text(
+                            'Plomería',
+                            style: TextStyle(
+                                fontFamily: "PoppinsRegular",
+                                fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        Text(
-                          'Plomería',
-                          style: TextStyle(
-                              fontFamily: "PoppinsRegular",
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      ],)
-                  ),
+                        ],
+                      )),
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     print("Se hizo Click en Jardinería");
                   },
                   child: Container(
@@ -353,40 +472,46 @@ class _ClientMenuState extends State<ClientMenu> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(11),
                           boxShadow: [
-                            BoxShadow(offset: Offset(0.0, 2.0), blurRadius: 1.0, spreadRadius: -1.0, color: Color(0x33000000)),
-                            BoxShadow(offset: Offset(0.0, 1.0), blurRadius: 1.0, spreadRadius: 0.0, color: Color(0x33000000)),
-                            BoxShadow(offset: Offset(0.0, 1.0), blurRadius: 3.0, spreadRadius: 0.0, color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 2.0),
+                                blurRadius: 1.0,
+                                spreadRadius: -1.0,
+                                color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 1.0),
+                                blurRadius: 1.0,
+                                spreadRadius: 0.0,
+                                color: Color(0x33000000)),
+                            BoxShadow(
+                                offset: Offset(0.0, 1.0),
+                                blurRadius: 3.0,
+                                spreadRadius: 0.0,
+                                color: Color(0x33000000)),
                           ]),
                       padding: const EdgeInsets.all(8),
-                      child: Column(children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: 10.0,
-                              bottom: 5.0
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(top: 10.0, bottom: 5.0),
+                            width: 64.0,
+                            height: 64.0,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage(
+                                        "images/icons/jardin-icon.png"))),
                           ),
-                          width: 64.0,
-                          height: 64.0,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage("images/icons/jardin-icon.png")
-                              )
+                          Text(
+                            'Jardinería',
+                            style: TextStyle(
+                                fontFamily: "PoppinsRegular",
+                                fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        Text(
-                          'Jardinería',
-                          style: TextStyle(
-                              fontFamily: "PoppinsRegular",
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      ],)
-                  ),
+                        ],
+                      )),
                 ),
               ],
-            )
-
-        )
+            ))
       ],
     );
   }
@@ -417,11 +542,17 @@ class _ClientMenuState extends State<ClientMenu> {
                     children: <Widget>[
                       Text(
                         "JsonChicas",
-                        style: TextStyle(fontFamily: 'PoppinsRegular', fontWeight: FontWeight.bold, fontSize: 24),
+                        style: TextStyle(
+                            fontFamily: 'PoppinsRegular',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24),
                       ),
                       Text(
                         "rabelyj@gmail.com",
-                        style: TextStyle(fontFamily: 'PoppinsRegular', fontWeight: FontWeight.normal, fontSize: 16),
+                        style: TextStyle(
+                            fontFamily: 'PoppinsRegular',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16),
                       )
                     ],
                   ))
@@ -438,13 +569,15 @@ class _ClientMenuState extends State<ClientMenu> {
         percentage: 0.6,
         appBar: AppBarProps(
             title: Text(
-                "Taski",
+              "Taski",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-
+                fontFamily: "PoppinsRegular",
               ),
             ),
-            actions: [IconButton(icon: Icon(Icons.notifications_none), onPressed: () {})]),
+            actions: [
+              IconButton(icon: Icon(Icons.notifications_none), onPressed: () {})
+            ]),
         menuView: new MenuView(
           menu: menu,
           headerView: headerView(context),
@@ -454,10 +587,10 @@ class _ClientMenuState extends State<ClientMenu> {
           onMenuItemSelected: (String itemId) {
             selectedMenuItemId = itemId;
             if (itemId == 'home') {
-              setState(() => _widget = homePage() );
+              setState(() => _widget = homePage());
               // Navigator.pushNamed(context, '/home');
-            }else if(itemId == 'reservas'){
-              setState(() => _widget = _reservas);
+            } else if (itemId == 'reservas') {
+              setState(() => _widget = reservas);
             }
           },
         ),
@@ -468,6 +601,4 @@ class _ClientMenuState extends State<ClientMenu> {
           color: Colors.white,
         ));
   }
-
-  
 }
