@@ -3,15 +3,21 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'proveedores_list.dart';
 
 class ServiceDescription extends StatefulWidget {
+  final String _categoryId;
+
+  ServiceDescription(this._categoryId);
+
   @override
   _ServiceDescriptionState createState() => _ServiceDescriptionState();
 }
 
 class _ServiceDescriptionState extends State<ServiceDescription> {
-
   String _date = "No Seleccionado";
 
   final _formKey = GlobalKey<FormState>();
+  final _descriptionController = TextEditingController();
+  final _addressController = TextEditingController();
+  DateTime _dateTime;
 
   @override
   Widget build(BuildContext context) {
@@ -22,36 +28,31 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
           "Describe tu Taski Servicio",
           textAlign: TextAlign.center,
           style: TextStyle(
-          fontFamily: "PoppinsRegular",
-          fontWeight: FontWeight.bold,
+            fontFamily: "PoppinsRegular",
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
       body: Container(
-        margin: EdgeInsets.only(
-          top: 40.0,
-          left: 20.0,
-          right: 20.0
-        ),
+        margin: EdgeInsets.only(top: 40.0, left: 20.0, right: 20.0),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                  "Descripción del Taski Servicio:",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15.0,
-                    fontFamily: 'PoppinsRegular',
-                  ),
+                "Descripción del Taski Servicio:",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15.0,
+                  fontFamily: 'PoppinsRegular',
                 ),
+              ),
               Container(
                 margin: EdgeInsets.only(bottom: 20.0),
                 child: TextFormField(
-                  style: TextStyle(
-                      fontFamily: "PoppinsRegular"
-                  ),
+                  style: TextStyle(fontFamily: "PoppinsRegular"),
+                  controller: _descriptionController,
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Por favor ingresar descripción del Taski servicio';
@@ -67,7 +68,6 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                   ),
                 ),
               ),
-
               Text(
                 "Dirección para el Taski servicio:",
                 style: TextStyle(
@@ -79,9 +79,8 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
               Container(
                 margin: EdgeInsets.only(bottom: 20.0),
                 child: TextFormField(
-                  style: TextStyle(
-                      fontFamily: "PoppinsRegular"
-                  ),
+                  style: TextStyle(fontFamily: "PoppinsRegular"),
+                  controller: _addressController,
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Por favor ingresar dirección';
@@ -120,10 +119,11 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                       showTitleActions: true,
                       minTime: DateTime(2000, 1, 1),
                       maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
-                        print('confirm $date');
-                        _date = '${date.year} - ${date.month} - ${date.day}';
-                        setState(() {});
-                      }, currentTime: DateTime.now(), locale: LocaleType.en);
+                    print('confirm $date');
+                    _dateTime = date;
+                    _date = '${date.year} - ${date.month} - ${date.day}';
+                    setState(() {});
+                  }, currentTime: DateTime.now(), locale: LocaleType.en);
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -171,15 +171,11 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Center(
-                 child: RaisedButton(
-                   textColor: Colors.white,
+                  child: RaisedButton(
+                    textColor: Colors.white,
                     color: Color(0xff2a7de1),
-                   padding: const EdgeInsets.only(
-                     top: 20.0,
-                     right: 20.0,
-                     left: 20.0,
-                     bottom: 20.0
-                   ),
+                    padding: const EdgeInsets.only(
+                        top: 20.0, right: 20.0, left: 20.0, bottom: 20.0),
                     onPressed: () {
                       // Validate returns true if the form is valid, or false
                       // otherwise.
@@ -188,14 +184,20 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                         print("todo validado");
                         Navigator.push(
                           context,
-                           MaterialPageRoute(builder: (context) => ProveedoresList()),
+                          MaterialPageRoute(
+                              builder: (context) => ProveedoresList(
+                                  widget._categoryId,
+                                  _descriptionController.text,
+                                  _addressController.text,
+                                  _dateTime)),
 //                          MaterialPageRoute(builder: (context) => ServiceDescription()),
                         );
                       }
                     },
-                    shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
                     child: Text(
-                        'Buscar Taski Proveedores',
+                      'Buscar Taski Proveedores',
                       style: TextStyle(
                         fontFamily: "PoppinsRegular",
                         fontWeight: FontWeight.bold,
@@ -212,4 +214,3 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
     );
   }
 }
-

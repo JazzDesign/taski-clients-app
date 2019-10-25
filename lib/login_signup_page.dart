@@ -1089,7 +1089,9 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
           actions: <Widget>[
             FlatButton(
               child: Text('Entendido'),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
           ],
         );

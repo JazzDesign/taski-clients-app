@@ -1,10 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'service_description.dart';
 
-class CategoryClient extends StatelessWidget {
-
+class CategoryClient extends StatefulWidget {
   //Cambiar por data que venga de Firebase
+  @override
+  _CategoryClientState createState() => _CategoryClientState();
+}
+
+class _CategoryClientState extends State<CategoryClient> {
   String clientName = "Json";
+
+  List<DocumentSnapshot> categories = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Firestore.instance.collection("categories").snapshots().listen((snapshot) {
+      setState(() {
+        categories = snapshot.documents;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +64,16 @@ class CategoryClient extends StatelessWidget {
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
               crossAxisCount: 3,
-              children: <Widget>[
-                GestureDetector(
+              children: categories.map((document) {
+                return GestureDetector(
                   onTap: () {
                     print("Se hizo Click en Pintura");
                     Navigator.push(
                       context,
 //                      MaterialPageRoute(builder: (context) => ProveedoresList()),
                       MaterialPageRoute(
-                          builder: (context) => ServiceDescription()),
+                          builder: (context) =>
+                              ServiceDescription(document.documentID)),
                     );
                   },
                   child: Container(
@@ -82,24 +102,26 @@ class CategoryClient extends StatelessWidget {
                         children: <Widget>[
                           Container(
                             margin: EdgeInsets.only(top: 10.0, bottom: 5.0),
-                            width: 64.0,
-                            height: 64.0,
+                            width: 32.0,
+                            height: 32.0,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: AssetImage(
-                                        "images/icons/paint-icon.png"))),
+                                        document['icon'].toString()))),
                           ),
                           Text(
-                            'Pintura',
+                            document['description'].toString(),
                             style: TextStyle(
                                 fontFamily: "PoppinsRegular",
                                 fontWeight: FontWeight.bold),
                           ),
                         ],
                       )),
-                ),
-                GestureDetector(
+                );
+              }).toList(),
+
+              /*GestureDetector(
                   onTap: () {
                     print("Se hizo Click en Reparaciones");
                   },
@@ -332,7 +354,7 @@ class CategoryClient extends StatelessWidget {
                         ],
                       )),
                 ),
-              ],
+              ],*/
             ))
       ],
     );
