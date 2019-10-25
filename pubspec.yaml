@@ -34,6 +34,8 @@ dev_dependencies:
   flutter_launcher_icons: "^0.7.3"
   search_widget: "^0.2.0"
   timeline_list: ^0.0.3
+  intl: ^0.16.0
+  flutter_datetime_picker: 1.2.5
 
 
 
