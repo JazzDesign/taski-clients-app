@@ -96,6 +96,7 @@ flutter:
     - images/icons/carpinteria-icon.png
     - images/icons/plomeria-icon.png
     - images/icons/jardin-icon.png
+    - images/cupon-background.png
 
   fonts:
     - family: PoppinsRegular
