@@ -171,7 +171,7 @@ class _ClientMenuState extends State<ClientMenu> {
                 } else if (itemId == 'notificaciones') {
                   setState(() => _widget = Notificaciones());
                 } else if (itemId == 'perfil') {
-                  setState(() => _widget = Perfil());
+                  setState(() => _widget = Perfil(userName, userEmail));
                 } else if (itemId == 'direcciones') {
                   setState(() => _widget = Direcciones());
                 } else if (itemId == 'pagos') {

@@ -33,7 +33,9 @@ class _NotificacionesState extends State<Notificaciones> {
         ),
         Container(
           margin: EdgeInsets.only(top: 200.0, right: 20.0, left: 20.0),
-          child: Text("Contenido") ,
+          child: SingleChildScrollView(
+            child: Text("Notificaciones"),
+          ),
         ),
       ],
     );
