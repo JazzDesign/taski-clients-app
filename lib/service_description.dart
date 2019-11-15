@@ -362,7 +362,7 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                                             _titleController.text,
                                             _descriptionController.text,
                                             _addressController.text,
-                                            _maxPay.text,
+                                            _totalHours.text,
                                             _dateTime)),
 //                          MaterialPageRoute(builder: (context) => ServiceDescription()),
                                   );

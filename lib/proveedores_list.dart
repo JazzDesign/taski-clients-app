@@ -137,7 +137,7 @@ class _ProveedoresListState extends State<ProveedoresList> {
             .add({
           'address': widget._address,
           'description': widget._description,
-          'price': widget._maxPay,
+          'price': int.parse(widget._maxPay),
           'title': widget._title,
           'scheduled': widget._date,
           'consumer': widget._userId
