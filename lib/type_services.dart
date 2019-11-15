@@ -4,9 +4,11 @@ import 'header_clip.dart';
 
 class TypeServices extends StatefulWidget {
   final String _categoryId;
+  final String _userId;
+
 //  final String _typeOfService;
 
-  TypeServices(this._categoryId);
+  TypeServices(this._userId, this._categoryId);
 
   @override
   _TypeServicesState createState() => _TypeServicesState();
@@ -72,63 +74,20 @@ class _TypeServicesState extends State<TypeServices> {
                   Container(
                     padding: EdgeInsets.only(left: 10.0, right: 10.0),
 //                    height: 100,
-                    width: MediaQuery.of(context).size.width/2,
+                    width: MediaQuery.of(context).size.width / 2,
                     child: FlatButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15.0))),
                       onPressed: () {
                         print("pago-fijo");
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ServiceDescription(widget._categoryId, "pago-fijo")),
-//                          MaterialPageRoute(builder: (context) => ServiceDescription()),
-                        );
-                        },
-                      color: Color(0xff2a7de1),
-                      child: Container(
-                        padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
-                        child: Center(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                                child: Icon(
-                                  Icons.attach_money,
-                                  color: Colors.white,
-                                  size: 64.0,
-                                ),
-                              ),
-                              Text(
-                                "Pago Fijo",
-                                style: TextStyle(
-                                  fontFamily: "PoppinsRegular",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0,
-                                  color: Colors.white
-                                ),
-                                maxLines: 2,
-                                softWrap: true,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 10.0, right: 10.0),
-//                    height: 100,
-                    width: MediaQuery.of(context).size.width/2,
-                    child: FlatButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                      onPressed: () {
-                        print("pago-hora");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ServiceDescription(widget._categoryId, "pago-hora")),
+                              builder: (context) => ServiceDescription(
+                                  widget._userId,
+                                  widget._categoryId,
+                                  "pago-fijo")),
 //                          MaterialPageRoute(builder: (context) => ServiceDescription()),
                         );
                       },
@@ -141,7 +100,61 @@ class _TypeServicesState extends State<TypeServices> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Container(
-                                margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                                margin:
+                                    EdgeInsets.only(top: 10.0, bottom: 10.0),
+                                child: Icon(
+                                  Icons.attach_money,
+                                  color: Colors.white,
+                                  size: 64.0,
+                                ),
+                              ),
+                              Text(
+                                "Pago Fijo",
+                                style: TextStyle(
+                                    fontFamily: "PoppinsRegular",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0,
+                                    color: Colors.white),
+                                maxLines: 2,
+                                softWrap: true,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 10.0, right: 10.0),
+//                    height: 100,
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: FlatButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15.0))),
+                      onPressed: () {
+                        print("pago-hora");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ServiceDescription(
+                                  widget._userId,
+                                  widget._categoryId,
+                                  "pago-hora")),
+//                          MaterialPageRoute(builder: (context) => ServiceDescription()),
+                        );
+                      },
+                      color: Color(0xff2a7de1),
+                      child: Container(
+                        padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
+                        child: Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                margin:
+                                    EdgeInsets.only(top: 10.0, bottom: 10.0),
                                 child: Icon(
                                   Icons.timer,
                                   color: Colors.white,
@@ -154,8 +167,7 @@ class _TypeServicesState extends State<TypeServices> {
                                     fontFamily: "PoppinsRegular",
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16.0,
-                                    color: Colors.white
-                                ),
+                                    color: Colors.white),
                                 maxLines: 2,
                                 softWrap: true,
                               ),
@@ -165,13 +177,10 @@ class _TypeServicesState extends State<TypeServices> {
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),
-
           ),
-
         ],
       ),
     );

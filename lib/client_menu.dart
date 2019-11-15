@@ -24,8 +24,6 @@ class ClientMenu extends StatefulWidget {
   _ClientMenuState createState() => _ClientMenuState();
 }
 
-
-
 class _ClientMenuState extends State<ClientMenu> {
   final menu = new Menu(
     items: [
@@ -72,7 +70,7 @@ class _ClientMenuState extends State<ClientMenu> {
   String userName = "";
   String userEmail = "";
 
-  Widget _widget = CategoryClient("", "");
+  Widget _widget;
 
   Widget headerView(DocumentSnapshot user, BuildContext context) {
     return Column(
@@ -123,6 +121,7 @@ class _ClientMenuState extends State<ClientMenu> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _widget = CategoryClient("", "", "");
     Firestore.instance
         .collection("users")
         .document(widget._userId)
@@ -132,7 +131,7 @@ class _ClientMenuState extends State<ClientMenu> {
         user = document;
         userName = document['name'];
         userEmail = document['email'];
-        _widget = CategoryClient(userName, userEmail);
+        _widget = CategoryClient(user.documentID, userName, userEmail);
         print("name = $userName");
       });
     });
@@ -164,10 +163,11 @@ class _ClientMenuState extends State<ClientMenu> {
               onMenuItemSelected: (String itemId) {
                 selectedMenuItemId = itemId;
                 if (itemId == 'home') {
-                  setState(() => _widget = CategoryClient(userName, userEmail));
+                  setState(() => _widget =
+                      CategoryClient(user.documentID, userName, userEmail));
                   // Navigator.pushNamed(context, '/home');
                 } else if (itemId == 'reservas') {
-                  setState(() => _widget = ReservasClient());
+                  setState(() => _widget = ReservasClient(widget._userId));
                 } else if (itemId == 'notificaciones') {
                   setState(() => _widget = Notificaciones());
                 } else if (itemId == 'perfil') {

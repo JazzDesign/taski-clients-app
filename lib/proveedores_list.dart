@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'header_clip.dart';
 
 class ProveedoresList extends StatefulWidget {
+  final String _userId;
+  final String _title;
   final String _categoryId;
   final String _description;
   final String _address;
   final String _maxPay;
   final DateTime _date;
 
-  ProveedoresList(
-      this._categoryId, this._description, this._address, this._maxPay, this._date);
+  ProveedoresList(this._userId,
+      this._categoryId, this._title, this._description, this._address, this._maxPay, this._date);
 
   @override
   _ProveedoresListState createState() => _ProveedoresListState();
@@ -128,13 +130,33 @@ class _ProveedoresListState extends State<ProveedoresList> {
     return GestureDetector(
       onTap: () {
         print("Selecciono un proveedor");
-        Firestore.instance.collection("users/${document.documentID}/jobs").add({
-          'title': widget._description,
-          'state': 'PENDING',
+
+        Firestore.instance
+            .collection(
+            "users/${document.documentID}/jobs")
+            .add({
           'address': widget._address,
-          'scheduled': widget._date
-        }).then((document) {
-          _showConfirmation(context);
+          'description': widget._description,
+          'price': widget._maxPay,
+          'title': widget._title,
+          'scheduled': widget._date,
+          'consumer': widget._userId
+        }).then((doc) {
+          Firestore.instance
+              .collection(
+              "users/${widget._userId}/jobs")
+              .add({
+            'address': widget._address,
+            'description':
+            widget._description,
+            'price': widget._maxPay,
+            'title': widget._title,
+            'scheduled': widget._date,
+            'state': 'PENDING',
+            'consumer': widget._userId
+          }).then((doc2) {
+            _showConfirmation(context);
+          });
         });
       },
       child: Container(

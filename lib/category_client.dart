@@ -8,16 +8,14 @@ import 'type_services.dart';
 class CategoryClient extends StatefulWidget {
   final String _userName;
   final String _userEmail;
-  CategoryClient(this._userName, this._userEmail);
+  final String _userId;
+
+  CategoryClient(this._userId, this._userName, this._userEmail);
 
   //Cambiar por data que venga de Firebase
   @override
   _CategoryClientState createState() => _CategoryClientState();
 }
-
-
-
-
 
 class _CategoryClientState extends State<CategoryClient> {
   String clientName = "";
@@ -50,7 +48,8 @@ class _CategoryClientState extends State<CategoryClient> {
                 shrinkWrap: true,
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(top: 200.0, left: 20.0, right: 20.0),
+                    margin:
+                        EdgeInsets.only(top: 200.0, left: 20.0, right: 20.0),
                     child: Text(
                       "Nuestros \nTaski Servicios",
                       textAlign: TextAlign.left,
@@ -61,9 +60,9 @@ class _CategoryClientState extends State<CategoryClient> {
                       ),
                     ),
                   ),
-
                   Container(
-                      margin: EdgeInsets.only(top: 30.0, right: 10.0, left: 10.0),
+                      margin:
+                          EdgeInsets.only(top: 30.0, right: 10.0, left: 10.0),
                       height: 300.0,
                       child: GridView.count(
                         primary: false,
@@ -79,8 +78,8 @@ class _CategoryClientState extends State<CategoryClient> {
                                 context,
 //                      MaterialPageRoute(builder: (context) => ProveedoresList()),
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        TypeServices(document.documentID)),
+                                    builder: (context) => TypeServices(
+                                        widget._userId, document.documentID)),
                               );
                             },
                             child: Container(
@@ -108,14 +107,15 @@ class _CategoryClientState extends State<CategoryClient> {
                                 child: Column(
                                   children: <Widget>[
                                     Container(
-                                      margin: EdgeInsets.only(top: 10.0, bottom: 5.0),
+                                      margin: EdgeInsets.only(
+                                          top: 10.0, bottom: 5.0),
                                       width: 54.0,
                                       height: 54.0,
                                       decoration: BoxDecoration(
                                           image: DecorationImage(
                                               fit: BoxFit.cover,
-                                              image: AssetImage(
-                                                  document['icon'].toString()))),
+                                              image: AssetImage(document['icon']
+                                                  .toString()))),
                                     ),
                                     Text(
                                       document['description'].toString(),
@@ -380,7 +380,6 @@ class _CategoryClientState extends State<CategoryClient> {
                 ],
               ),
             ),
-
             Stack(
               children: <Widget>[
                 HeaderClip(),

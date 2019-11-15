@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'proveedores_list.dart';
@@ -6,8 +7,9 @@ import 'header_clip.dart';
 class ServiceDescription extends StatefulWidget {
   final String _categoryId;
   final String _typeOfService;
+  final String _userId;
 
-  ServiceDescription(this._categoryId, this._typeOfService);
+  ServiceDescription(this._userId, this._categoryId, this._typeOfService);
 
   @override
   _ServiceDescriptionState createState() => _ServiceDescriptionState();
@@ -63,7 +65,7 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
               ],
             ),
             Container(
-              margin: EdgeInsets.only(top: 200.0, left: 20.0, right: 20.0),
+              margin: EdgeInsets.only(top: 180.0, left: 20.0, right: 20.0),
               child: SingleChildScrollView(
                 child: Form(
                   key: _formKey,
@@ -176,12 +178,16 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                               ),
                               showTitleActions: true,
                               minTime: DateTime(2000, 1, 1),
-                              maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
-                                print('confirm $date');
-                                _dateTime = date;
-                                _date = '${date.year} - ${date.month} - ${date.day}';
-                                setState(() {});
-                              }, currentTime: DateTime.now(), locale: LocaleType.en);
+                              maxTime: DateTime(2022, 12, 31),
+                              onConfirm: (date) {
+                            print('confirm $date');
+                            _dateTime = date;
+                            _date =
+                                '${date.year} - ${date.month} - ${date.day}';
+                            setState(() {});
+                          },
+                              currentTime: DateTime.now(),
+                              locale: LocaleType.en);
                         },
                         child: Container(
                           alignment: Alignment.center,
@@ -228,73 +234,73 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                       ),
                       widget._typeOfService == 'pago-fijo'
                           ? new Wrap(
-                        children: <Widget>[
-                          Text(
-                            "Ingrese monto máximo a pagar:",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15.0,
-                              fontFamily: 'PoppinsRegular',
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(bottom: 20.0),
-                            child: TextFormField(
-                              style: TextStyle(fontFamily: "PoppinsRegular"),
-                              keyboardType: TextInputType.number,
-                              controller: _maxPay,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Por favor ingresar monto maximo';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                hintText: 'Q150',
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontFamily: 'PoppinsRegular',
+                              children: <Widget>[
+                                Text(
+                                  "Ingrese monto máximo a pagar:",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15.0,
+                                    fontFamily: 'PoppinsRegular',
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
-
-                        ],
-                      )
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 20.0),
+                                  child: TextFormField(
+                                    style:
+                                        TextStyle(fontFamily: "PoppinsRegular"),
+                                    keyboardType: TextInputType.number,
+                                    controller: _maxPay,
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return 'Por favor ingresar monto maximo';
+                                      }
+                                      return null;
+                                    },
+                                    decoration: InputDecoration(
+                                      hintText: 'Q150',
+                                      hintStyle: TextStyle(
+                                        color: Colors.grey,
+                                        fontFamily: 'PoppinsRegular',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
                           : new Wrap(
-                        children: <Widget>[
-                          Text(
-                            "Ingrese cantidad de Hrs:",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15.0,
-                              fontFamily: 'PoppinsRegular',
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(bottom: 20.0),
-                            child: TextFormField(
-                              style: TextStyle(fontFamily: "PoppinsRegular"),
-                              keyboardType: TextInputType.number,
-                              controller: _totalHours,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Por favor ingresar cantidad de horas';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                hintText: '3',
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontFamily: 'PoppinsRegular',
+                              children: <Widget>[
+                                Text(
+                                  "Ingrese cantidad de Hrs:",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15.0,
+                                    fontFamily: 'PoppinsRegular',
+                                  ),
                                 ),
-                              ),
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 20.0),
+                                  child: TextFormField(
+                                    style:
+                                        TextStyle(fontFamily: "PoppinsRegular"),
+                                    keyboardType: TextInputType.number,
+                                    controller: _totalHours,
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return 'Por favor ingresar cantidad de horas';
+                                      }
+                                      return null;
+                                    },
+                                    decoration: InputDecoration(
+                                      hintText: '3',
+                                      hintStyle: TextStyle(
+                                        color: Colors.grey,
+                                        fontFamily: 'PoppinsRegular',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-
-                        ],
-                      ),
                       SizedBox(
                         height: 20.0,
                       ),
@@ -305,30 +311,70 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                             textColor: Colors.white,
                             color: Color(0xff2a7de1),
                             padding: const EdgeInsets.only(
-                                top: 20.0, right: 20.0, left: 20.0, bottom: 20.0),
+                                top: 20.0,
+                                right: 20.0,
+                                left: 20.0,
+                                bottom: 20.0),
                             onPressed: () {
                               // Validate returns true if the form is valid, or false
                               // otherwise.
-                              if (_formKey.currentState.validate()) {
+//                              if (_formKey.currentState.validate()) {
                                 // If the form is valid, display a Snackbar .
-                                print("todo validado");
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ProveedoresList(
-                                          widget._categoryId,
+                                if (widget._typeOfService == "pago-fijo") {
+                                  // La agregamos al pool
+                                  print(widget._typeOfService);
+
+                                  Firestore.instance
+                                      .collection(
+                                          "categories/${widget._categoryId}/jobs")
+                                      .add({
+                                    'address': _addressController.text,
+                                    'description': _descriptionController.text,
+                                    'price': _maxPay.text,
+                                    'title': _titleController.text,
+                                    'scheduled': _dateTime,
+                                    'consumer': widget._userId
+                                  }).then((doc) {
+                                    Firestore.instance
+                                        .collection(
+                                            "users/${widget._userId}/jobs")
+                                        .add({
+                                      'address': _addressController.text,
+                                      'description':
                                           _descriptionController.text,
-                                          _addressController.text,
-                                          _maxPay.text,
-                                          _dateTime)),
+                                      'price': int.parse(_maxPay.text),
+                                      'title': _titleController.text,
+                                      'scheduled': _dateTime,
+                                      'state': 'PENDING',
+                                      'consumer': widget._userId
+                                    }).then((doc2) {
+                                      _showConfirmation(context);
+                                    });
+                                  });
+                                } else {
+                                  print("todo validado");
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ProveedoresList(
+                                            widget._userId,
+                                            widget._categoryId,
+                                            _titleController.text,
+                                            _descriptionController.text,
+                                            _addressController.text,
+                                            _maxPay.text,
+                                            _dateTime)),
 //                          MaterialPageRoute(builder: (context) => ServiceDescription()),
-                                );
+                                  );
+//                                }
                               }
                             },
                             shape: RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(30.0)),
                             child: Text(
-                              'Buscar Taski Proveedores',
+                              widget._typeOfService == "pago-fijo"
+                                  ? "Crear Tarea"
+                                  : 'Buscar Taski Proveedores',
                               style: TextStyle(
                                 fontFamily: "PoppinsRegular",
                                 fontWeight: FontWeight.bold,
@@ -346,7 +392,44 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
           ],
         ),
       ),
+    );
+  }
 
+  Future<void> _showConfirmation(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            'Felicidades!',
+            style: TextStyle(color: Colors.black),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Tu tarea ha sido calendarizada.',
+                  style: TextStyle(color: Colors.black),
+                ),
+                Text(
+                  'El proveedor en unos momentos la aprobara.',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Entendido'),
+              onPressed: () {
+                Navigator.of(context).popUntil((route) {
+                  return route.isFirst;
+                });
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
