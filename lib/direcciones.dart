@@ -24,12 +24,39 @@ class _DireccionesState extends State<Direcciones> {
     var children = <Widget>[];
     children.add(GestureDetector(
       child: Card(
-        child: ListTile(
-          leading: Icon(Icons.hourglass_full),
-          title: Text(
-              "${document['name']}"),
-          trailing: Icon(
-            Icons.chevron_right,
+        color: Colors.transparent,
+        elevation: 8.0,
+        margin: new EdgeInsets.symmetric(vertical: 6.0),
+        child:
+        Container(
+          decoration: BoxDecoration(color: Color(0xff2a7de1), borderRadius: BorderRadius.all(Radius.circular(10.0))),
+          child: ListTile(
+            contentPadding:
+            EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            leading: Container(
+              padding: EdgeInsets.only(right: 12.0),
+              decoration: new BoxDecoration(
+                  border: new Border(
+                      right: new BorderSide(width: 2.0, color: Colors.white24))),
+              child: Icon(Icons.home, color: Colors.white),
+            ),
+            title: Text(
+                "${document['name']}",
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+            // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+
+            subtitle: Row(
+              children: <Widget>[
+                Text("${document['address']}",
+                    style: TextStyle(color: Colors.white)),
+              ],
+            ),
+            trailing:
+            Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),
+            onTap: () {
+              print("Ver mas");
+            },
           ),
         ),
       ),
@@ -60,40 +87,33 @@ class _DireccionesState extends State<Direcciones> {
                   ),
                 ),
               ),
-              Card(
-                color: Colors.transparent,
-                elevation: 8.0,
-                margin: new EdgeInsets.symmetric(vertical: 6.0),
-                child: Container(
-                  decoration: BoxDecoration(color: Color(0xff2a7de1), borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  child: ListTile(
-                    contentPadding:
-                    EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                    leading: Container(
-                      padding: EdgeInsets.only(right: 12.0),
-                      decoration: new BoxDecoration(
-                          border: new Border(
-                              right: new BorderSide(width: 2.0, color: Colors.white24))),
-                      child: Icon(Icons.home, color: Colors.white),
-                    ),
-                    title: Text(
-                      "Casa",
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                    // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-
-                    subtitle: Row(
-                      children: <Widget>[
-                        Text("4ta Calle, 7 Av. Zona 10",
-                            style: TextStyle(color: Colors.white)),
-                      ],
-                    ),
-                    trailing:
-                    Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),
-                    onTap: () {
-                      print("Ver mas");
-                    },
-                  ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.3,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: Firestore.instance
+                      .collection('users/${widget.userId}/address')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return const Text('Cargando...');
+                    if (snapshot.data.documents.isEmpty) {
+                      return Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(24),
+                            child: Text(
+                                'Aun No tienes direcciones guardadas'),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return ListView.builder(
+                          itemCount: snapshot.data.documents.length,
+                          itemBuilder: (context, index) {
+                            return _buildListItem(
+                                context, snapshot.data.documents[index]);
+                          });
+                    }
+                  },
                 ),
               ),
               Container(
@@ -153,34 +173,6 @@ class _DireccionesState extends State<Direcciones> {
             ),
           ],
         ),
-        Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: StreamBuilder<QuerySnapshot>(
-              stream: Firestore.instance
-                  .collection('users/${widget.userId}/address')
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const Text('Cargando...');
-                if (snapshot.data.documents.isEmpty) {
-                  return Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: Text(
-                            'Aun No tienes direcciones guardadas'),
-                      ),
-                    ],
-                  );
-                } else {
-                  return ListView.builder(
-                      itemCount: snapshot.data.documents.length,
-                      itemBuilder: (context, index) {
-                        return _buildListItem(
-                            context, snapshot.data.documents[index]);
-                      });
-                }
-              },
-            )),
       ],
     );
   }

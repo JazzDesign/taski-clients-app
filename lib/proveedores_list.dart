@@ -208,7 +208,7 @@ class _ProveedoresListState extends State<ProveedoresList> {
                           margin: EdgeInsets.only(left: 20.0),
                           padding: EdgeInsets.only(bottom: 10.0),
                           child: Text(
-                            "Q240.00/hr",
+                           "Q " + document['hour_charge'].toString() + "/hr",
                             style: TextStyle(
                                 fontFamily: "PoppinsRegular",
                                 color: Colors.white,
@@ -230,71 +230,71 @@ class _ProveedoresListState extends State<ProveedoresList> {
                             fontSize: 14.0),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(
-                        left: 20.0,
-                      ),
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            child: Text(
-                              "Calificación:",
-                              style: TextStyle(
-                                  fontFamily: "PoppinsRegular",
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 12.0),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 15.0, right: 1.0),
-                            child: Icon(
-                              Icons.star,
-                              size: 20.0,
-                              color: Color(0xFFF2C611),
-                            ),
-                            width: 5.0,
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 15.0, right: 1.0),
-                            child: Icon(
-                              Icons.star,
-                              size: 20.0,
-                              color: Color(0xFFF2C611),
-                            ),
-                            width: 5.0,
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 15.0, right: 1.0),
-                            child: Icon(
-                              Icons.star,
-                              size: 20.0,
-                              color: Color(0xFFF2C611),
-                            ),
-                            width: 5.0,
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 15.0, right: 1.0),
-                            child: Icon(
-                              Icons.star,
-                              size: 20.0,
-                              color: Color(0xFFF2C611),
-                            ),
-                            width: 5.0,
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 15.0, right: 1.0),
-                            child: Icon(
-                              Icons.star_half,
-                              size: 20.0,
-                              color: Color(0xFFF2C611),
-                            ),
-                            width: 5.0,
-                          ),
-                        ],
-                      ),
-                    ),
+//                    Container(
+//                      margin: EdgeInsets.only(
+//                        left: 20.0,
+//                      ),
+//                      padding: EdgeInsets.only(top: 10.0),
+//                      child: Row(
+//                        children: <Widget>[
+//                          Container(
+//                            child: Text(
+//                              "Calificación:",
+//                              style: TextStyle(
+//                                  fontFamily: "PoppinsRegular",
+//                                  fontWeight: FontWeight.bold,
+//                                  color: Colors.white,
+//                                  fontSize: 12.0),
+//                            ),
+//                          ),
+//                          Container(
+//                            margin: EdgeInsets.only(left: 15.0, right: 1.0),
+//                            child: Icon(
+//                              Icons.star,
+//                              size: 20.0,
+//                              color: Color(0xFFF2C611),
+//                            ),
+//                            width: 5.0,
+//                          ),
+//                          Container(
+//                            margin: EdgeInsets.only(left: 15.0, right: 1.0),
+//                            child: Icon(
+//                              Icons.star,
+//                              size: 20.0,
+//                              color: Color(0xFFF2C611),
+//                            ),
+//                            width: 5.0,
+//                          ),
+//                          Container(
+//                            margin: EdgeInsets.only(left: 15.0, right: 1.0),
+//                            child: Icon(
+//                              Icons.star,
+//                              size: 20.0,
+//                              color: Color(0xFFF2C611),
+//                            ),
+//                            width: 5.0,
+//                          ),
+//                          Container(
+//                            margin: EdgeInsets.only(left: 15.0, right: 1.0),
+//                            child: Icon(
+//                              Icons.star,
+//                              size: 20.0,
+//                              color: Color(0xFFF2C611),
+//                            ),
+//                            width: 5.0,
+//                          ),
+//                          Container(
+//                            margin: EdgeInsets.only(left: 15.0, right: 1.0),
+//                            child: Icon(
+//                              Icons.star_half,
+//                              size: 20.0,
+//                              color: Color(0xFFF2C611),
+//                            ),
+//                            width: 5.0,
+//                          ),
+//                        ],
+//                      ),
+//                    ),
                   ],
                 ),
               ],
