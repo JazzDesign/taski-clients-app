@@ -173,7 +173,7 @@ class _ClientMenuState extends State<ClientMenu> {
                 } else if (itemId == 'perfil') {
                   setState(() => _widget = Perfil(userName, userEmail));
                 } else if (itemId == 'direcciones') {
-                  setState(() => _widget = Direcciones());
+                  setState(() => _widget = Direcciones(widget._userId));
                 } else if (itemId == 'pagos') {
                   setState(() => _widget = Payment());
                 } else if (itemId == 'logout') {

@@ -1,16 +1,49 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'header_clip.dart';
 
 class Direcciones extends StatefulWidget {
+  DocumentSnapshot user;
+  String userId;
+
+
+  Direcciones(this.userId);
+
   @override
   _DireccionesState createState() => _DireccionesState();
 }
 
 class _DireccionesState extends State<Direcciones> {
+  String userName = "";
+  String userEmail = "";
+
+
+
+  Widget _buildListItem(
+      BuildContext context, DocumentSnapshot document) {
+    var children = <Widget>[];
+    children.add(GestureDetector(
+      child: Card(
+        child: ListTile(
+          leading: Icon(Icons.hourglass_full),
+          title: Text(
+              "${document['name']}"),
+          trailing: Icon(
+            Icons.chevron_right,
+          ),
+        ),
+      ),
+      onTap: () {
+      },
+    ));
+    return Column(children: children);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
+
         Container(
           margin: EdgeInsets.only(right: 20.0, left: 20.0),
           child: ListView(
@@ -120,6 +153,34 @@ class _DireccionesState extends State<Direcciones> {
             ),
           ],
         ),
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: StreamBuilder<QuerySnapshot>(
+              stream: Firestore.instance
+                  .collection('users/${widget.userId}/address')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return const Text('Cargando...');
+                if (snapshot.data.documents.isEmpty) {
+                  return Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Text(
+                            'Aun No tienes direcciones guardadas'),
+                      ),
+                    ],
+                  );
+                } else {
+                  return ListView.builder(
+                      itemCount: snapshot.data.documents.length,
+                      itemBuilder: (context, index) {
+                        return _buildListItem(
+                            context, snapshot.data.documents[index]);
+                      });
+                }
+              },
+            )),
       ],
     );
   }
