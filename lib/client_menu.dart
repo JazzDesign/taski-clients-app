@@ -8,6 +8,10 @@ import 'service_description.dart';
 import 'reservas_client.dart';
 import 'category_client.dart';
 import 'services/authentication.dart';
+import 'notificaciones.dart';
+import 'perfil.dart';
+import 'direcciones.dart';
+import 'payment.dart';
 
 class ClientMenu extends StatefulWidget {
   final String _userId;
@@ -164,6 +168,14 @@ class _ClientMenuState extends State<ClientMenu> {
                   // Navigator.pushNamed(context, '/home');
                 } else if (itemId == 'reservas') {
                   setState(() => _widget = ReservasClient());
+                } else if (itemId == 'notificaciones') {
+                  setState(() => _widget = Notificaciones());
+                } else if (itemId == 'perfil') {
+                  setState(() => _widget = Perfil());
+                } else if (itemId == 'direcciones') {
+                  setState(() => _widget = Direcciones());
+                } else if (itemId == 'pagos') {
+                  setState(() => _widget = Payment());
                 } else if (itemId == 'logout') {
                   widget.auth.signOut();
                   widget.onSignedOut();
