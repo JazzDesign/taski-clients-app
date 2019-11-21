@@ -83,7 +83,7 @@ class _ReservasClientState extends State<ReservasClient> {
                                   BorderRadius.all(Radius.circular(10.0))),
                               child: Center(
                                 child: Text(
-                                  "Programada",
+                                  doc['state'] == 'PENDING' ? "Pendiente" :"Programada",
                                   style: TextStyle(
                                     fontSize: 9.0,
                                     fontFamily: "PoppinsRegular",

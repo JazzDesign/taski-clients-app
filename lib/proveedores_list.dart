@@ -9,12 +9,19 @@ class ProveedoresList extends StatefulWidget {
   final String _categoryId;
   final String _description;
   final String _address;
-  final String _maxPay;
+  final String _totalHours;
   final DateTime _date;
   final List<String> _photos;
 
-  ProveedoresList(this._userId, this._categoryId, this._title,
-      this._description, this._address, this._maxPay, this._date, this._photos);
+  ProveedoresList(
+      this._userId,
+      this._categoryId,
+      this._title,
+      this._description,
+      this._address,
+      this._totalHours,
+      this._date,
+      this._photos);
 
   @override
   _ProveedoresListState createState() => _ProveedoresListState();
@@ -132,19 +139,23 @@ class _ProveedoresListState extends State<ProveedoresList> {
     return GestureDetector(
       onTap: () {
         print("Selecciono un proveedor");
+        final int totalHours = int.parse(widget._totalHours);
+        final int hourCharge = int.parse(document['hour_charge']);
 
         Firestore.instance.collection("users/${document.documentID}/jobs").add({
           'address': widget._address,
           'description': widget._description,
-          'price': int.parse(widget._maxPay),
+          'price': totalHours * hourCharge,
           'title': widget._title,
           'scheduled': widget._date,
-          'consumer': widget._userId
+          'consumer': widget._userId,
+          'photos': widget._photos,
+          'state': 'PENDING'
         }).then((doc) {
           Firestore.instance.collection("users/${widget._userId}/jobs").add({
             'address': widget._address,
             'description': widget._description,
-            'price': widget._maxPay,
+            'price': totalHours * hourCharge,
             'title': widget._title,
             'scheduled': widget._date,
             'state': 'PENDING',
