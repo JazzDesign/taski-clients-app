@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'proveedores_list.dart';
 import 'header_clip.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 
 class ServiceDescription extends StatefulWidget {
   final String _categoryId;
@@ -29,18 +31,41 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
   final _totalHours = TextEditingController();
   DateTime _dateTime;
 
-  File _image;
+  List<File> photos = [];
+  List<String> photosUris = [];
+  bool _loadingPhoto = false;
+  bool _photoUploaded = false;
 
-  Future getImage() async {
+  Future _getImage(BuildContext context) async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
     setState(() {
-      _image = image;
+      photos.add(image);
+    });
+    await uploadPic(context, image);
+  }
+
+  Future uploadPic(BuildContext context, File image) async {
+    String fileName = basename(image.path);
+    StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child(fileName);
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(image);
+    setState(() {
+      _photoUploaded = false;
+      _loadingPhoto = true;
+    });
+    var url = await (await uploadTask.onComplete).ref.getDownloadURL();
+    print("Profile Picture uploaded");
+    print("Fotos = $url");
+    photosUris.add(url);
+    setState(() {
+      _loadingPhoto = false;
+      _photoUploaded = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final Size deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -246,24 +271,71 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                         height: 20.0,
                       ),
                       Container(
-                        margin: EdgeInsets.only(bottom: 10.0),
-                        child: Center(
-                          child: _image == null ? Text('Seleccione una imagen') : Image.file(_image),
-                        ),
-                      ),
-                      Center(
-                        child: RaisedButton(
-                          color: Color(0xff2a7de1),
-                          onPressed: getImage,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(30.0)),
-                          child: Icon(
-                              Icons.add_a_photo,
-                            color: Colors.white,
+                        height: deviceSize.height / 4,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 18.0, vertical: 5.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Fotos",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18.0),
+                                ),
+                              ),
+                              Expanded(
+                                child: Card(
+                                  child: photos.isEmpty
+                                      ? Row(children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                            child: Text("No tienes fotos aun"),
+                                          )
+                                        ])
+                                      : ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: photos.length,
+                                          itemBuilder: (context, index) =>
+                                              Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Image.file(photos[index]),
+                                          ),
+                                        ),
+                                ),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  RaisedButton(
+                                    color: Color(0xff2a7de1),
+                                    onPressed: () => _getImage(context),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            new BorderRadius.circular(30.0)),
+                                    child: Icon(
+                                      Icons.add_a_photo,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 16),
+                                    child: Text(_loadingPhoto
+                                        ? 'Subiendo foto...'
+                                        : (_photoUploaded
+                                            ? 'Foto subida correctamente'
+                                            : '')),
+                                  )
+                                ],
+                              )
+                            ],
                           ),
                         ),
                       ),
-
                       SizedBox(
                         height: 20.0,
                       ),
@@ -354,53 +426,54 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                               // Validate returns true if the form is valid, or false
                               // otherwise.
 //                              if (_formKey.currentState.validate()) {
-                                // If the form is valid, display a Snackbar .
-                                if (widget._typeOfService == "pago-fijo") {
-                                  // La agregamos al pool
-                                  print(widget._typeOfService);
+                              // If the form is valid, display a Snackbar .
+                              if (widget._typeOfService == "pago-fijo") {
+                                // La agregamos al pool
+                                print(widget._typeOfService);
 
+                                Firestore.instance
+                                    .collection(
+                                        "categories/${widget._categoryId}/jobs")
+                                    .add({
+                                  'address': _addressController.text,
+                                  'description': _descriptionController.text,
+                                  'price': _maxPay.text,
+                                  'title': _titleController.text,
+                                  'scheduled': _dateTime,
+                                  'consumer': widget._userId
+                                }).then((doc) {
                                   Firestore.instance
                                       .collection(
-                                          "categories/${widget._categoryId}/jobs")
+                                          "users/${widget._userId}/jobs")
                                       .add({
                                     'address': _addressController.text,
                                     'description': _descriptionController.text,
-                                    'price': _maxPay.text,
+                                    'price': int.parse(_maxPay.text),
                                     'title': _titleController.text,
                                     'scheduled': _dateTime,
+                                    'state': 'PENDING',
                                     'consumer': widget._userId
-                                  }).then((doc) {
-                                    Firestore.instance
-                                        .collection(
-                                            "users/${widget._userId}/jobs")
-                                        .add({
-                                      'address': _addressController.text,
-                                      'description':
-                                          _descriptionController.text,
-                                      'price': int.parse(_maxPay.text),
-                                      'title': _titleController.text,
-                                      'scheduled': _dateTime,
-                                      'state': 'PENDING',
-                                      'consumer': widget._userId
-                                    }).then((doc2) {
-                                      _showConfirmation(context);
-                                    });
+                                  }).then((doc2) {
+                                    _showConfirmation(context);
                                   });
-                                } else {
-                                  print("todo validado");
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ProveedoresList(
-                                            widget._userId,
-                                            widget._categoryId,
-                                            _titleController.text,
-                                            _descriptionController.text,
-                                            _addressController.text,
-                                            _totalHours.text,
-                                            _dateTime)),
+                                });
+                              } else {
+                                print("todo validado");
+                                print("Fotos = $photosUris");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProveedoresList(
+                                          widget._userId,
+                                          widget._categoryId,
+                                          _titleController.text,
+                                          _descriptionController.text,
+                                          _addressController.text,
+                                          _totalHours.text,
+                                          _dateTime,
+                                          photosUris)),
 //                          MaterialPageRoute(builder: (context) => ServiceDescription()),
-                                  );
+                                );
 //                                }
                               }
                             },

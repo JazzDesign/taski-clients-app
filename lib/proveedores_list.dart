@@ -10,9 +10,10 @@ class ProveedoresList extends StatefulWidget {
   final String _address;
   final String _maxPay;
   final DateTime _date;
+  final List<String> _photos;
 
-  ProveedoresList(this._userId,
-      this._categoryId, this._title, this._description, this._address, this._maxPay, this._date);
+  ProveedoresList(this._userId, this._categoryId, this._title,
+      this._description, this._address, this._maxPay, this._date, this._photos);
 
   @override
   _ProveedoresListState createState() => _ProveedoresListState();
@@ -131,10 +132,7 @@ class _ProveedoresListState extends State<ProveedoresList> {
       onTap: () {
         print("Selecciono un proveedor");
 
-        Firestore.instance
-            .collection(
-            "users/${document.documentID}/jobs")
-            .add({
+        Firestore.instance.collection("users/${document.documentID}/jobs").add({
           'address': widget._address,
           'description': widget._description,
           'price': int.parse(widget._maxPay),
@@ -142,13 +140,9 @@ class _ProveedoresListState extends State<ProveedoresList> {
           'scheduled': widget._date,
           'consumer': widget._userId
         }).then((doc) {
-          Firestore.instance
-              .collection(
-              "users/${widget._userId}/jobs")
-              .add({
+          Firestore.instance.collection("users/${widget._userId}/jobs").add({
             'address': widget._address,
-            'description':
-            widget._description,
+            'description': widget._description,
             'price': widget._maxPay,
             'title': widget._title,
             'scheduled': widget._date,
@@ -208,7 +202,7 @@ class _ProveedoresListState extends State<ProveedoresList> {
                           margin: EdgeInsets.only(left: 20.0),
                           padding: EdgeInsets.only(bottom: 10.0),
                           child: Text(
-                           "Q " + document['hour_charge'].toString() + "/hr",
+                            "Q " + document['hour_charge'].toString() + "/hr",
                             style: TextStyle(
                                 fontFamily: "PoppinsRegular",
                                 color: Colors.white,
@@ -349,8 +343,7 @@ class _ProveedoresListState extends State<ProveedoresList> {
                 child: Container(
                   decoration: BoxDecoration(
                       color: Color(0xff2a7de1),
-                    borderRadius: BorderRadius.all(Radius.circular(15.0))
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
                   child: proveedorCard(context, document),
                 ),
               );
