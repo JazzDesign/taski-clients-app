@@ -13,11 +13,136 @@ class Direcciones extends StatefulWidget {
   _DireccionesState createState() => _DireccionesState();
 }
 
+
+
 class _DireccionesState extends State<Direcciones> {
   String userName = "";
   String userEmail = "";
 
 
+
+  void _settingModalBottomSheet(context){
+    final _formKey = GlobalKey<FormState>();
+    final _nameController = TextEditingController();
+    final _descriptionController = TextEditingController();
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc){
+          return FractionallySizedBox(
+            heightFactor: 0.7,
+            child: Container(
+              padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0, bottom: 20.0),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 20.0),
+                        child: Text(
+                          "Agrega una nueva dirección:",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18.0,
+                            fontFamily: 'PoppinsRegular',
+                          ),
+                        ),
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          icon: const Icon(
+                            Icons.gesture,
+                          ),
+                          hintText: 'Ingresa nombre de tu dirección',
+                          hintStyle: TextStyle(
+                              fontFamily: "PoppinsRegular",
+                              color: Colors.black
+                          ),
+                          labelText: 'Nombre',
+                          labelStyle: TextStyle(
+                              fontFamily: "PoppinsRegular"
+                          ),
+                        ),
+                        controller: _nameController,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Por favor ingresar nombre';
+                          }
+                          return null;
+                        },
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          icon: const Icon(
+                            Icons.map,
+                          ),
+                          hintText: 'Ingresa tu dirección',
+                          hintStyle: TextStyle(
+                              fontFamily: "PoppinsRegular",
+                              color: Colors.black
+                          ),
+                          labelText: 'Dirección',
+                          labelStyle: TextStyle(
+                              fontFamily: "PoppinsRegular"
+                          ),
+                        ),
+                        controller: _descriptionController,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Por favor ingresar dirección';
+                          }
+                          return null;
+                        },
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                          child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
+                            textColor: Colors.white,
+                            color: Color(0xff2a7de1),
+                            padding: const EdgeInsets.only(
+                                top: 20.0,
+                                right: 20.0,
+                                left: 20.0,
+                                bottom: 20.0),
+                            child: Text(
+                              "Agregar",
+                              style: TextStyle(
+                                  fontFamily: "PoppinsRegular",
+                                  color: Colors.white
+                              ),
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState.validate()) {
+
+                                Firestore.instance
+                                    .collection(
+                                    'users/${widget.userId}/address')
+                                    .add({
+                                  'address': _descriptionController.text,
+                                  'name': _nameController.text
+                                });
+                                print("Se Agregó");
+                                Navigator.of(context).pop();
+                              }
+
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+    );
+  }
 
   Widget _buildListItem(
       BuildContext context, DocumentSnapshot document) {
@@ -88,7 +213,7 @@ class _DireccionesState extends State<Direcciones> {
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height * 0.3,
+                height: MediaQuery.of(context).size.height - 425.0,
                 child: StreamBuilder<QuerySnapshot>(
                   stream: Firestore.instance
                       .collection('users/${widget.userId}/address')
@@ -141,7 +266,8 @@ class _DireccionesState extends State<Direcciones> {
                       trailing:
                       Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),
                       onTap: () {
-                        print("Ver mas");
+                        print("Se agregará una nueva dirección");
+                        _settingModalBottomSheet(context);
                       },
                     ),
                   ),

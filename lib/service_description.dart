@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'proveedores_list.dart';
 import 'header_clip.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ServiceDescription extends StatefulWidget {
   final String _categoryId;
@@ -25,6 +28,16 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
   final _maxPay = TextEditingController();
   final _totalHours = TextEditingController();
   DateTime _dateTime;
+
+  File _image;
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = image;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -229,6 +242,28 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                         ),
                         color: Colors.white,
                       ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10.0),
+                        child: Center(
+                          child: _image == null ? Text('Seleccione una imagen') : Image.file(_image),
+                        ),
+                      ),
+                      Center(
+                        child: RaisedButton(
+                          color: Color(0xff2a7de1),
+                          onPressed: getImage,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(30.0)),
+                          child: Icon(
+                              Icons.add_a_photo,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+
                       SizedBox(
                         height: 20.0,
                       ),
