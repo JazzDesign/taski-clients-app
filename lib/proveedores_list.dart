@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:taski_clients/provider_profile.dart';
 import 'header_clip.dart';
 
 class ProveedoresList extends StatefulWidget {
@@ -213,17 +214,21 @@ class _ProveedoresListState extends State<ProveedoresList> {
                       ],
                     ),
                     Container(
-                      margin: EdgeInsets.only(
-                        left: 20.0,
-                      ),
-                      child: Text(
-                        "3 Servicios realizados",
-                        style: TextStyle(
-                            fontFamily: "PoppinsRegular",
-                            color: Colors.white70,
-                            fontSize: 14.0),
-                      ),
-                    ),
+                        margin: EdgeInsets.only(
+                          left: 20.0,
+                        ),
+                        child: FlatButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProviderProfile(document.documentID)),
+//                          MaterialPageRoute(builder: (context) => ServiceDescription()),
+                              );
+                            },
+                            icon: Icon(Icons.account_circle),
+                            label: Text("Ver Perfil"))),
 //                    Container(
 //                      margin: EdgeInsets.only(
 //                        left: 20.0,
