@@ -74,10 +74,12 @@ packages:
   drawerbehavior:
     dependency: "direct main"
     description:
-      name: drawerbehavior
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.8"
+      path: "."
+      ref: master
+      resolved-ref: "1fa8a9f0daf547c0528a802077a99f62c3cb54ab"
+      url: "git://github.com/vladaman/Drawer-Behavior-Flutter.git"
+    source: git
+    version: "0.0.7"
   firebase_auth:
     dependency: "direct main"
     description:
