@@ -437,10 +437,11 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                                     .add({
                                   'address': _addressController.text,
                                   'description': _descriptionController.text,
-                                  'price': _maxPay.text,
+                                  'price': int.parse(_maxPay.text),
                                   'title': _titleController.text,
                                   'scheduled': _dateTime,
-                                  'consumer': widget._userId
+                                  'consumer': widget._userId,
+                                  'photos': photosUris
                                 }).then((doc) {
                                   Firestore.instance
                                       .collection(
@@ -452,7 +453,8 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                                     'title': _titleController.text,
                                     'scheduled': _dateTime,
                                     'state': 'PENDING',
-                                    'consumer': widget._userId
+                                    'consumer': widget._userId,
+                                    'photos': photosUris
                                   }).then((doc2) {
                                     _showConfirmation(context);
                                   });
@@ -520,7 +522,7 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                   style: TextStyle(color: Colors.black),
                 ),
                 Text(
-                  'El proveedor en unos momentos la aprobara.',
+                  'Te notificaremos cuando un proveedor decida tomarla.',
                   style: TextStyle(color: Colors.black),
                 ),
               ],

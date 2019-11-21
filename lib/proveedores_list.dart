@@ -141,25 +141,30 @@ class _ProveedoresListState extends State<ProveedoresList> {
         print("Selecciono un proveedor");
         final int totalHours = int.parse(widget._totalHours);
         final int hourCharge = int.parse(document['hour_charge']);
-
-        Firestore.instance.collection("users/${document.documentID}/jobs").add({
+        Firestore.instance.collection("users/${widget._userId}/jobs").add({
           'address': widget._address,
           'description': widget._description,
           'price': totalHours * hourCharge,
           'title': widget._title,
           'scheduled': widget._date,
           'consumer': widget._userId,
+          'provider': document.documentID,
           'photos': widget._photos,
           'state': 'PENDING'
         }).then((doc) {
-          Firestore.instance.collection("users/${widget._userId}/jobs").add({
+          Firestore.instance
+              .collection("users/${document.documentID}/jobs")
+              .add({
             'address': widget._address,
             'description': widget._description,
             'price': totalHours * hourCharge,
             'title': widget._title,
             'scheduled': widget._date,
-            'state': 'PENDING',
-            'consumer': widget._userId
+            'consumer': widget._userId,
+            'provider': document.documentID,
+            'consumerJob': doc.documentID,
+            'photos': widget._photos,
+            'state': 'PENDING'
           }).then((doc2) {
             _showConfirmation(context);
           });
