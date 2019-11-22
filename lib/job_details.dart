@@ -202,7 +202,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: Card(
+                  child: (document != null && document['requests'] != null) ? Card(
                     color: primaryColor,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -298,7 +298,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                 : []),
                           ]),
                     ),
-                  ),
+                  ):null,
                 ),
                 /*Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),

@@ -432,30 +432,30 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                                 print(widget._typeOfService);
 
                                 Firestore.instance
-                                    .collection(
-                                        "categories/${widget._categoryId}/jobs")
+                                    .collection("users/${widget._userId}/jobs")
                                     .add({
                                   'address': _addressController.text,
                                   'description': _descriptionController.text,
                                   'price': int.parse(_maxPay.text),
                                   'title': _titleController.text,
                                   'scheduled': _dateTime,
+                                  'state': 'PENDING',
                                   'consumer': widget._userId,
                                   'photos': photosUris
-                                }).then((doc) {
+                                }).then((doc2) {
                                   Firestore.instance
                                       .collection(
-                                          "users/${widget._userId}/jobs")
+                                          "categories/${widget._categoryId}/jobs")
                                       .add({
                                     'address': _addressController.text,
                                     'description': _descriptionController.text,
                                     'price': int.parse(_maxPay.text),
                                     'title': _titleController.text,
                                     'scheduled': _dateTime,
-                                    'state': 'PENDING',
                                     'consumer': widget._userId,
+                                    'consumerJob': doc2.documentID,
                                     'photos': photosUris
-                                  }).then((doc2) {
+                                  }).then((doc) {
                                     _showConfirmation(context);
                                   });
                                 });
