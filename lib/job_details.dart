@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'formatters.dart';
+import 'provider_profile.dart';
 import 'views/arc_clipper.dart';
 import 'views/label_icon.dart';
 
@@ -113,9 +114,12 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                           SizedBox(
                             height: 10.0,
                           ),
-                          Text(document != null
-                              ? document['address'].toString()
-                              : "", style: TextStyle(color: Colors.white),),
+                          Text(
+                            document != null
+                                ? document['address'].toString()
+                                : "",
+                            style: TextStyle(color: Colors.white),
+                          ),
                           SizedBox(
                             height: 10.0,
                           ),
@@ -195,6 +199,107 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                     ),
                   ),
                 ),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Card(
+                    color: primaryColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                                document != null && document['requests'] != null
+                                    ? "Solicitudes"
+                                    : "Todavia no tienes solicitudes.",
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white)),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            ...(document != null && document['requests'] != null
+                                ? (document['requests'] as Iterable)
+                                    .toList()
+                                    .map((request) {
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          request['name'],
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            FlatButton(
+                                              child: Text(
+                                                'Ver Perfil',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ProviderProfile(
+                                                              request['id'])),
+//                          MaterialPageRoute(builder: (context) => ServiceDescription()),
+                                                );
+                                              },
+                                            ),
+                                            FlatButton(
+                                              child: Text(
+                                                'Rechazar',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              onPressed: () {},
+                                            ),
+                                            FlatButton(
+                                              child: Text(
+                                                'Aceptar',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              onPressed: () {
+                                                document.reference.setData({
+                                                  'state': 'SCHEDULED',
+                                                  'requests': null
+                                                }, merge: true).then((doc) {
+                                                  Map<String, dynamic> data =
+                                                      document.data;
+                                                  data['state'] = 'SCHEDULED';
+                                                  data['requests'] = null;
+                                                  Firestore.instance
+                                                      .collection(
+                                                          "users/${request['id']}/jobs")
+                                                      .add(data);
+                                                });
+                                              },
+                                            )
+                                          ],
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                        ),
+                                      ],
+                                    );
+                                  })
+                                : []),
+                          ]),
+                    ),
+                  ),
+                ),
                 /*Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: Card(
@@ -217,19 +322,19 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
         icon: Icons.check,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,*/
-      bottomNavigationBar: BottomAppBar(
-        clipBehavior: Clip.antiAlias,
-        shape: CircularNotchedRectangle(),
-        child: Ink(
-          height: 50.0,
-          decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [primaryColor, Colors.blue])),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: _getBottomNavigationButtons()),
-        ),
-      ),
+//      bottomNavigationBar: BottomAppBar(
+//        clipBehavior: Clip.antiAlias,
+//        shape: CircularNotchedRectangle(),
+//        child: Ink(
+//          height: 50.0,
+//          decoration: BoxDecoration(
+//              gradient: LinearGradient(colors: [primaryColor, Colors.blue])),
+//          child: Row(
+//              mainAxisAlignment: MainAxisAlignment.spaceAround,
+//              crossAxisAlignment: CrossAxisAlignment.center,
+//              children: _getBottomNavigationButtons()),
+//        ),
+//      ),
     );
   }
 
@@ -240,7 +345,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
       return children;
     }
 
-    if (document["state"] == null) {
+    /*if (document["state"] == null) {
       children.add(
         SizedBox(
           height: double.infinity,
@@ -355,7 +460,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
           ),
         ),
       );
-    }
+    }*/
     return children;
   }
 }
