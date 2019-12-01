@@ -94,7 +94,9 @@ class _ReservasClientState extends State<ReservasClient> {
                                         ? "Pendiente"
                                         : (doc['state'] == 'SCHEDULED'
                                             ? "Programada"
-                                            : "Completada"),
+                                            : (doc['state'] == 'FINISHED'
+                                                ? "Revisar"
+                                                : "Completada")),
                                     style: TextStyle(
                                       fontSize: 9.0,
                                       fontFamily: "PoppinsRegular",
@@ -180,7 +182,9 @@ class _ReservasClientState extends State<ReservasClient> {
                     ? Icons.access_time
                     : (doc['state'] == 'SCHEDULED'
                         ? Icons.calendar_today
-                        : Icons.check_circle),
+                        : (doc['state'] == 'FINISHED'
+                            ? Icons.rate_review
+                            : Icons.check_circle)),
                 color: Colors.white,
               ));
         }).toList();

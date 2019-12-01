@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'finish_job.dart';
 import 'formatters.dart';
+import 'full_screen_photo.dart';
 import 'provider_profile.dart';
 import 'views/arc_clipper.dart';
 import 'views/label_icon.dart';
@@ -159,7 +161,15 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                         itemCount: photos.length,
                         itemBuilder: (context, i) => Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Image.network(photos[i].toString()),
+                          child: GestureDetector(
+                            child: Image.network(photos[i].toString()),
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (_) {
+                                return FullScreenPhoto(photos[i]);
+                              }));
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -202,103 +212,174 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: (document != null && document['requests'] != null) ? Card(
-                    color: primaryColor,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                                document != null && document['requests'] != null
-                                    ? "Solicitudes"
-                                    : "Todavia no tienes solicitudes.",
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white)),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            ...(document != null && document['requests'] != null
-                                ? (document['requests'] as Iterable)
-                                    .toList()
-                                    .map((request) {
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          request['name'],
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        SizedBox(
-                                          height: 5.0,
-                                        ),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            FlatButton(
-                                              child: Text(
-                                                'Ver Perfil',
+                  child: (document != null && document['requests'] != null)
+                      ? Card(
+                          color: primaryColor,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                      document != null &&
+                                              document['requests'] != null &&
+                                              (document['requests'] as Iterable)
+                                                  .toList()
+                                                  .isNotEmpty
+                                          ? "Solicitudes"
+                                          : "Todavia no tienes solicitudes.",
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white)),
+                                  SizedBox(
+                                    height: 16,
+                                  ),
+                                  ...(document != null &&
+                                          document['requests'] != null
+                                      ? (document['requests'] as Iterable)
+                                          .toList()
+                                          .map((request) {
+                                          return Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                request['name'],
                                                 style: TextStyle(
-                                                    color: Colors.white),
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
-                                              onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ProviderProfile(
-                                                              request['id'])),
+                                              SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  FlatButton(
+                                                    child: Text(
+                                                      'Ver Perfil',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                ProviderProfile(
+                                                                    request[
+                                                                        'id'])),
 //                          MaterialPageRoute(builder: (context) => ServiceDescription()),
-                                                );
-                                              },
-                                            ),
-                                            FlatButton(
-                                              child: Text(
-                                                'Rechazar',
-                                                style: TextStyle(
-                                                    color: Colors.white),
+                                                      );
+                                                    },
+                                                  ),
+                                                  FlatButton(
+                                                    child: Text(
+                                                      'Rechazar',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                    onPressed: () {
+                                                      List<dynamic> requests =
+                                                          (document['requests']
+                                                                  as Iterable)
+                                                              .toList();
+
+                                                      requests
+                                                          .removeWhere((req) {
+                                                        return req['id'] ==
+                                                            request['id'];
+                                                      });
+                                                      document.reference
+                                                          .setData({
+                                                        'requests': requests
+                                                      }, merge: true).then(
+                                                              (doc) {
+                                                        Firestore.instance
+                                                            .collection(
+                                                                "categories/${document.data['categoryId']}/jobs")
+                                                            .where(
+                                                                'consumerJob',
+                                                                isEqualTo: document
+                                                                    .documentID)
+                                                            .getDocuments()
+                                                            .then((snapshot) {
+                                                          for (DocumentSnapshot ds
+                                                              in snapshot
+                                                                  .documents) {
+                                                            ds.reference
+                                                                .setData({
+                                                              'requests':
+                                                                  requests
+                                                            }, merge: true);
+                                                          }
+                                                        });
+                                                      });
+                                                    },
+                                                  ),
+                                                  FlatButton(
+                                                    child: Text(
+                                                      'Aceptar',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                    onPressed: () {
+                                                      document.reference
+                                                          .setData({
+                                                        'state': 'SCHEDULED',
+                                                        'requests': null
+                                                      }, merge: true).then(
+                                                              (doc) {
+                                                        Map<String, dynamic>
+                                                            data =
+                                                            document.data;
+                                                        data['state'] =
+                                                            'SCHEDULED';
+                                                        data['requests'] = null;
+                                                        data['consumerJob'] =
+                                                            document.documentID;
+                                                        Firestore.instance
+                                                            .collection(
+                                                                "users/${request['id']}/jobs")
+                                                            .add(data)
+                                                            .then((doc) {
+                                                          Firestore.instance
+                                                              .collection(
+                                                                  "categories/${data['categoryId']}/jobs")
+                                                              .where(
+                                                                  'consumerJob',
+                                                                  isEqualTo:
+                                                                      document
+                                                                          .documentID)
+                                                              .getDocuments()
+                                                              .then((snapshot) {
+                                                            for (DocumentSnapshot ds
+                                                                in snapshot
+                                                                    .documents) {
+                                                              ds.reference
+                                                                  .delete();
+                                                            }
+                                                          });
+                                                        });
+                                                      });
+                                                    },
+                                                  )
+                                                ],
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                               ),
-                                              onPressed: () {},
-                                            ),
-                                            FlatButton(
-                                              child: Text(
-                                                'Aceptar',
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                              onPressed: () {
-                                                document.reference.setData({
-                                                  'state': 'SCHEDULED',
-                                                  'requests': null
-                                                }, merge: true).then((doc) {
-                                                  Map<String, dynamic> data =
-                                                      document.data;
-                                                  data['state'] = 'SCHEDULED';
-                                                  data['requests'] = null;
-                                                  Firestore.instance
-                                                      .collection(
-                                                          "users/${request['id']}/jobs")
-                                                      .add(data);
-                                                });
-                                              },
-                                            )
-                                          ],
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                        ),
-                                      ],
-                                    );
-                                  })
-                                : []),
-                          ]),
-                    ),
-                  ):null,
+                                            ],
+                                          );
+                                        })
+                                      : []),
+                                ]),
+                          ),
+                        )
+                      : null,
                 ),
                 /*Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -314,153 +395,55 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
           ),
         ],
       ),
-      /*floatingActionButton: CustomFloat(
-        builder: Text(
-          "5",
-          style: TextStyle(color: Colors.white, fontSize: 10.0),
-        ),
-        icon: Icons.check,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,*/
-//      bottomNavigationBar: BottomAppBar(
-//        clipBehavior: Clip.antiAlias,
-//        shape: CircularNotchedRectangle(),
-//        child: Ink(
-//          height: 50.0,
-//          decoration: BoxDecoration(
-//              gradient: LinearGradient(colors: [primaryColor, Colors.blue])),
-//          child: Row(
-//              mainAxisAlignment: MainAxisAlignment.spaceAround,
-//              crossAxisAlignment: CrossAxisAlignment.center,
-//              children: _getBottomNavigationButtons()),
-//        ),
-//      ),
+      bottomNavigationBar: (document != null && document['state'] == 'FINISHED'
+          ? BottomAppBar(
+              clipBehavior: Clip.antiAlias,
+              shape: CircularNotchedRectangle(),
+              child: Ink(
+                height: 50.0,
+                decoration: BoxDecoration(
+                    gradient:
+                        LinearGradient(colors: [primaryColor, Colors.blue])),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: _getBottomNavigationButtons()),
+              ),
+            )
+          : null),
     );
   }
 
   List<Widget> _getBottomNavigationButtons() {
     List<Widget> children = [];
 
-    if (document == null) {
-      return children;
-    }
+    children.add(
+      SizedBox(
+        height: double.infinity,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute<FinishJob>(
+                builder: (context) => FinishJob(document),
+              ),
+            );
+          },
+          radius: 10.0,
+          splashColor: Colors.yellow,
+          child: Center(
+            child: Text(
+              "Revisar",
+              style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+          ),
+        ),
+      ),
+    );
 
-    /*if (document["state"] == null) {
-      children.add(
-        SizedBox(
-          height: double.infinity,
-          child: InkWell(
-            onTap: () {
-//            document.reference.setData({'state': 'SCHEDULED'},
-//                merge: true).then((snapshot) {
-//              Navigator.of(context).popUntil((route) {
-//                return route.isFirst;
-//              });
-//            });
-              print("Solicitar!");
-            },
-            radius: 10.0,
-            splashColor: Colors.yellow,
-            child: Center(
-              child: Text(
-                "Solicitar",
-                style: TextStyle(
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-            ),
-          ),
-        ),
-      );
-    } else if (document["state"] == "PENDING") {
-      children.addAll(
-        <Widget>[
-          SizedBox(
-            height: double.infinity,
-            child: InkWell(
-              radius: 10.0,
-              splashColor: Colors.yellow,
-              onTap: () {},
-              child: Center(
-                child: Text(
-                  "Rechazar",
-                  style: TextStyle(
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 20.0,
-          ),
-          SizedBox(
-            height: double.infinity,
-            child: InkWell(
-              onTap: () {
-                document.reference.setData({'state': 'SCHEDULED'},
-                    merge: true).then((snapshot) {
-                  Firestore.instance
-                      .collection("users/${document['consumer']}/jobs")
-                      .document(document['consumerJob'].toString())
-                      .setData({'state': 'SCHEDULED'}, merge: true).then(
-                          (snapshot) {
-                    Navigator.of(context).popUntil((route) {
-                      return route.isFirst;
-                    });
-                  });
-                });
-              },
-              radius: 10.0,
-              splashColor: Colors.yellow,
-              child: Center(
-                child: Text(
-                  "Aceptar",
-                  style: TextStyle(
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
-    } else if (document["state"] == "SCHEDULED") {
-      children.add(
-        SizedBox(
-          height: double.infinity,
-          child: InkWell(
-            onTap: () {
-              document.reference
-                  .setData({'state': 'DONE'}, merge: true).then((snapshot) {
-                Firestore.instance
-                    .collection("users/${document['consumer']}/jobs")
-                    .document(document['consumerJob'].toString())
-                    .setData({'state': 'DONE'}, merge: true).then((snapshot) {
-                  Navigator.of(context).popUntil((route) {
-                    return route.isFirst;
-                  });
-                });
-              });
-            },
-            radius: 10.0,
-            splashColor: Colors.yellow,
-            child: Center(
-              child: Text(
-                "Marcar Como Terminado",
-                style: TextStyle(
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-            ),
-          ),
-        ),
-      );
-    }*/
     return children;
   }
 }
