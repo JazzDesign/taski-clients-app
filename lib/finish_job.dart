@@ -1,8 +1,12 @@
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:taski_clients/full_screen_photo.dart';
+import 'package:path/path.dart';
 
 class FinishJob extends StatefulWidget {
   final DocumentSnapshot document;
@@ -14,17 +18,20 @@ class FinishJob extends StatefulWidget {
 }
 
 class _FinishJobState extends State<FinishJob> {
-//  List<File> photos = [];
+  List<File> photos = [];
+  List<String> rejectedPhotos = [];
   List<String> finishedPhotos = [];
 
   double rating = 1;
+
+  bool isRejected = false;
 
   bool _loadingPhoto = false;
   bool _photoUploaded = false;
 
   final TextEditingController controller = TextEditingController();
 
-  /*Future getImage(BuildContext context) async {
+  Future getImage(BuildContext context) async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
       photos.add(image);
@@ -43,12 +50,12 @@ class _FinishJobState extends State<FinishJob> {
     });
     var url = await (await uploadTask.onComplete).ref.getDownloadURL();
     print("Profile Picture uploaded");
-    finishedPhotos.add(url.toString());
+    rejectedPhotos.add(url.toString());
     setState(() {
       _loadingPhoto = false;
       _photoUploaded = false;
     });
-  }*/
+  }
 
   @override
   void initState() {
@@ -97,7 +104,10 @@ class _FinishJobState extends State<FinishJob> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16),
-                                  child: Text("No hay fotos del trabajo"),
+                                  child: Text(
+                                    "No hay fotos del trabajo",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 )
                               ])
                             : ListView.builder(
@@ -168,7 +178,7 @@ class _FinishJobState extends State<FinishJob> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: RatingBar(
-                initialRating: 1,
+                initialRating: 5,
                 direction: Axis.horizontal,
                 itemCount: 5,
                 itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
@@ -181,27 +191,148 @@ class _FinishJobState extends State<FinishJob> {
                 },
               ),
             ),
-            Padding(
-                padding: const EdgeInsets.all(24),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    OutlineButton(
-                      child: Text('Rechazar'),
-                      onPressed: () {},
+            !isRejected
+                ? Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        OutlineButton(
+                          child: Text('Rechazar'),
+                          onPressed: () {
+                            setState(() {
+                              isRejected = true;
+                            });
+                          },
+                        ),
+                        RaisedButton(
+                          child: Text('Aceptar'),
+                          onPressed: () {
+                            widget.document.reference.setData({'state': 'DONE'},
+                                merge: true).then((snapshot1) {
+                              Firestore.instance
+                                  .collection(
+                                      "users/${widget.document['provider']}/jobs")
+                                  .document(
+                                      widget.document['providerJob'].toString())
+                                  .setData({'state': 'DONE'}, merge: true).then(
+                                      (snapshot2) {
+                                Firestore.instance
+                                    .collection("users")
+                                    .document(widget.document['provider'])
+                                    .get()
+                                    .then((doc) {
+                                  doc.reference.setData({
+                                    'rating': doc['rating'] + rating,
+                                    'ratingCount': doc['ratingCount'] + 1
+                                  }, merge: true).then((doc) {
+                                    Navigator.of(context).pop();
+                                  });
+                                });
+                              });
+                            });
+                          },
+                        )
+                      ],
+                    ))
+                : Container(),
+            isRejected
+                ? Container(
+                    height: deviceSize.height / 4,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18.0, vertical: 5.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Fotos",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 18.0),
+                            ),
+                          ),
+                          Expanded(
+                            child: Card(
+                              color: primaryColor,
+                              child: photos.isEmpty
+                                  ? Row(children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: Text(
+                                          "No tienes fotos aun",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      )
+                                    ])
+                                  : ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: photos.length,
+                                      itemBuilder: (context, index) => Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image.file(photos[index]),
+                                      ),
+                                    ),
+                            ),
+                          ),
+                          Row(
+                            children: <Widget>[
+                              RaisedButton(
+                                onPressed: () {
+                                  getImage(context);
+                                },
+                                child: Text("Subir Foto"),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                child: Text(_loadingPhoto
+                                    ? 'Subiendo foto...'
+                                    : (_photoUploaded
+                                        ? 'Foto subida correctamente'
+                                        : '')),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    RaisedButton(
-                      child: Text('Aceptar'),
+                  )
+                : Container(),
+            isRejected
+                ? Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Comentarios (opcional)",
+                      ),
+                      controller: controller,
+                    ),
+                  )
+                : Container(),
+            isRejected
+                ? Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: RaisedButton(
+                      child: Text('Subir'),
                       onPressed: () {
-                        widget.document.reference.setData({'state': 'DONE'},
-                            merge: true).then((snapshot1) {
+                        widget.document.reference.setData({
+                          'state': 'REJECTED',
+                          'rejectedPhotos': rejectedPhotos,
+                          'rejectedComment': controller.text
+                        }, merge: true).then((snapshot1) {
                           Firestore.instance
                               .collection(
                                   "users/${widget.document['provider']}/jobs")
                               .document(
                                   widget.document['providerJob'].toString())
-                              .setData({'state': 'DONE'}, merge: true).then(
-                                  (snapshot2) {
+                              .setData({
+                            'state': 'REJECTED',
+                            'rejectedPhotos': rejectedPhotos,
+                            'rejectedComment': controller.text
+                          }, merge: true).then((snapshot2) {
                             Firestore.instance
                                 .collection("users")
                                 .document(widget.document['provider'])
@@ -217,9 +348,8 @@ class _FinishJobState extends State<FinishJob> {
                           });
                         });
                       },
-                    )
-                  ],
-                )),
+                    ))
+                : Container(),
           ],
         ),
       ),

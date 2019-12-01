@@ -13,8 +13,10 @@ class ServiceDescription extends StatefulWidget {
   final String _categoryId;
   final String _typeOfService;
   final String _userId;
+  final DocumentSnapshot jobDocument;
 
-  ServiceDescription(this._userId, this._categoryId, this._typeOfService);
+  ServiceDescription(this._userId, this._categoryId, this._typeOfService,
+      {this.jobDocument});
 
   @override
   _ServiceDescriptionState createState() => _ServiceDescriptionState();
@@ -61,6 +63,17 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
       _loadingPhoto = false;
       _photoUploaded = false;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.jobDocument != null) {
+      _titleController.text = widget.jobDocument['title'];
+      _descriptionController.text = widget.jobDocument['description'];
+      _addressController.text = widget.jobDocument['address'];
+    }
   }
 
   @override
@@ -460,6 +473,52 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                                     _showConfirmation(context);
                                   });
                                 });
+                              }
+                              if (widget.jobDocument != null) {
+                                final int totalHours =
+                                    int.parse(_totalHours.text);
+                                Firestore.instance
+                                    .collection("users")
+                                    .document(widget.jobDocument['provider'])
+                                    .get()
+                                    .then((provider) {
+                                  final int hourCharge =
+                                      int.parse(provider['hour_charge']);
+                                  Firestore.instance
+                                      .collection(
+                                          "users/${widget._userId}/jobs")
+                                      .add({
+                                    'address': _addressController.text,
+                                    'description': _descriptionController.text,
+                                    'price': totalHours * hourCharge,
+                                    'title': _titleController.text,
+                                    'scheduled': _dateTime,
+                                    'consumer': widget._userId,
+                                    'provider': widget.jobDocument['provider'],
+                                    'photos': photosUris,
+                                    'state': 'PENDING'
+                                  }).then((doc) {
+                                    Firestore.instance
+                                        .collection(
+                                            "users/${widget.jobDocument['provider']}/jobs")
+                                        .add({
+                                      'address': _addressController.text,
+                                      'description':
+                                          _descriptionController.text,
+                                      'price': totalHours * hourCharge,
+                                      'title': _titleController.text,
+                                      'scheduled': _dateTime,
+                                      'consumer': widget._userId,
+                                      'provider':
+                                          widget.jobDocument['provider'],
+                                      'consumerJob': doc.documentID,
+                                      'photos': photosUris,
+                                      'state': 'PENDING'
+                                    }).then((doc2) {
+                                      _showConfirmation(context);
+                                    });
+                                  });
+                                });
                               } else {
                                 print("todo validado");
                                 print("Fotos = $photosUris");
@@ -485,7 +544,9 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                             child: Text(
                               widget._typeOfService == "pago-fijo"
                                   ? "Crear Tarea"
-                                  : 'Buscar Taski Proveedores',
+                                  : (widget.jobDocument != null)
+                                      ? 'Crear'
+                                      : 'Buscar Taski Proveedores',
                               style: TextStyle(
                                 fontFamily: "PoppinsRegular",
                                 fontWeight: FontWeight.bold,

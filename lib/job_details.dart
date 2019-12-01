@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:taski_clients/service_description.dart';
 
 import 'finish_job.dart';
 import 'formatters.dart';
@@ -11,8 +12,9 @@ import 'views/label_icon.dart';
 class JobDetailsScreen extends StatefulWidget {
   final String _jobPath;
   final String _jobId;
+  final String _userId;
 
-  JobDetailsScreen(this._jobPath, this._jobId);
+  JobDetailsScreen(this._jobPath, this._jobId, this._userId);
 
   @override
   _JobDetailsScreenState createState() => _JobDetailsScreenState();
@@ -395,7 +397,8 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: (document != null && document['state'] == 'FINISHED'
+      bottomNavigationBar: (document != null &&
+              (document['state'] == 'FINISHED' || document['state'] == 'DONE')
           ? BottomAppBar(
               clipBehavior: Clip.antiAlias,
               shape: CircularNotchedRectangle(),
@@ -416,33 +419,68 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
 
   List<Widget> _getBottomNavigationButtons() {
     List<Widget> children = [];
-
-    children.add(
-      SizedBox(
-        height: double.infinity,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute<FinishJob>(
-                builder: (context) => FinishJob(document),
+    if (document['state'] == 'FINISHED') {
+      children.add(
+        SizedBox(
+          height: double.infinity,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<FinishJob>(
+                  builder: (context) => FinishJob(document),
+                ),
+              );
+            },
+            radius: 10.0,
+            splashColor: Colors.yellow,
+            child: Center(
+              child: Text(
+                "Revisar",
+                style: TextStyle(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
-            );
-          },
-          radius: 10.0,
-          splashColor: Colors.yellow,
-          child: Center(
-            child: Text(
-              "Revisar",
-              style: TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
+
+    if (document['state'] == 'DONE') {
+      children.add(
+        SizedBox(
+          height: double.infinity,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ServiceDescription(
+                          widget._userId,
+                          document['categoryId'],
+                          "pago-hora",
+                          jobDocument: document,
+                        )),
+//                          MaterialPageRoute(builder: (context) => ServiceDescription()),
+              );
+            },
+            radius: 10.0,
+            splashColor: Colors.yellow,
+            child: Center(
+              child: Text(
+                "Solicitar trabajo de nuevo",
+                style: TextStyle(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
 
     return children;
   }

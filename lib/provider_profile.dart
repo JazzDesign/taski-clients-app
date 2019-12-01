@@ -107,8 +107,10 @@ class _ProviderProfileState extends State<ProviderProfile> {
                   children: <Widget>[
                     ProfileTile(
                       title: user != null &&
-                          (double.parse(user['ratingCount'].toString())) > 0
-                          ? (user['rating'] / user['ratingCount']).toString()
+                              (double.parse(user['ratingCount'].toString())) > 0
+                          ? (double.parse(user['rating'].toString()) /
+                                  double.parse(user['ratingCount'].toString()))
+                              .toStringAsFixed(1)
                           : "N/R",
                       subtitle: "Rating",
                     ),

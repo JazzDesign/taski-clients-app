@@ -56,7 +56,9 @@ class _ReservasClientState extends State<ReservasClient> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => JobDetailsScreen(
-                            "/users/${widget._userId}/jobs", doc.documentID)),
+                            "/users/${widget._userId}/jobs",
+                            doc.documentID,
+                            widget._userId)),
                   );
                 },
                 child: Card(
@@ -96,7 +98,9 @@ class _ReservasClientState extends State<ReservasClient> {
                                             ? "Programada"
                                             : (doc['state'] == 'FINISHED'
                                                 ? "Revisar"
-                                                : "Completada")),
+                                                : (doc['state'] == 'REJECTED'
+                                                    ? "Rechazada"
+                                                    : "Completada"))),
                                     style: TextStyle(
                                       fontSize: 9.0,
                                       fontFamily: "PoppinsRegular",
@@ -184,7 +188,9 @@ class _ReservasClientState extends State<ReservasClient> {
                         ? Icons.calendar_today
                         : (doc['state'] == 'FINISHED'
                             ? Icons.rate_review
-                            : Icons.check_circle)),
+                            : (doc['state'] == 'REJECTED'
+                                ? Icons.clear
+                                : Icons.check_circle))),
                 color: Colors.white,
               ));
         }).toList();
