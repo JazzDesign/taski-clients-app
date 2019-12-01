@@ -243,8 +243,14 @@ class _ProveedoresListState extends State<ProveedoresList> {
 //                          MaterialPageRoute(builder: (context) => ServiceDescription()),
                               );
                             },
-                            icon: Icon(Icons.account_circle),
-                            label: Text("Ver Perfil"))),
+                            icon: Icon(
+                                Icons.account_circle,
+                             color: Colors.white,
+                            ),
+                            label: Text(
+                                "Ver Perfil",
+                            style: TextStyle(color: Colors.white),
+                            ))),
 //                    Container(
 //                      margin: EdgeInsets.only(
 //                        left: 20.0,

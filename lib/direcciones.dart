@@ -150,7 +150,7 @@ class _DireccionesState extends State<Direcciones> {
     children.add(GestureDetector(
       child: Card(
         color: Colors.transparent,
-        elevation: 8.0,
+        elevation: 0.0,
         margin: new EdgeInsets.symmetric(vertical: 6.0),
         child:
         Container(
@@ -223,10 +223,21 @@ class _DireccionesState extends State<Direcciones> {
                     if (snapshot.data.documents.isEmpty) {
                       return Column(
                         children: <Widget>[
+                          Container(
+                            child: Image.asset(
+                                'images/no-address.png',
+                              width: 300,
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(24),
                             child: Text(
-                                'Aun No tienes direcciones guardadas'),
+                                'No tienes direcciones guardadas, agrega una dirección',
+                              style: TextStyle(
+                                fontFamily: "PoppinsRegular",
+                              ),
+                            ),
                           ),
                         ],
                       );
@@ -245,7 +256,7 @@ class _DireccionesState extends State<Direcciones> {
                 margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
                 child: Card(
                   color: Colors.transparent,
-                  elevation: 8.0,
+                  elevation: 0.0,
                   margin: new EdgeInsets.symmetric(vertical: 6.0),
                   child: Container(
                     decoration: BoxDecoration(color: Color(0xff2a7de1), borderRadius: BorderRadius.all(Radius.circular(10.0))),

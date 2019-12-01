@@ -215,7 +215,22 @@ class _ReservasClientState extends State<ReservasClient> {
           ),
         ),
         Expanded(
-          child: Timeline(children: items, position: TimelinePosition.Left),
+          child: items.isNotEmpty
+              ? Timeline(children: items, position: TimelinePosition.Left)
+              : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Image.asset("images/no-services.png"),
+              Center(
+                child: Text(
+                  "No has realizado ninguna reserva de Taski Servicios",
+                  style: TextStyle(
+                    fontFamily: "PoppinsRegular",
+                  ),
+                ),
+              ),
+            ],
+          ),
         )
       ],
     );

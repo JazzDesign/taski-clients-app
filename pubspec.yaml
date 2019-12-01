@@ -46,10 +46,13 @@ dev_dependencies:
 
 
 
+
 flutter_icons:
-  android: "launcher_icon"
   ios: true
-  image_path: "assets/icon/icon.png"
+  android: true
+  image_path_ios: "images/launcher/icon-consumidor.png"
+  image_path_android: "images/launcher/icon-consumidor.png"
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -104,6 +107,11 @@ flutter:
     - images/icons/plomeria-icon.png
     - images/icons/jardin-icon.png
     - images/cupon-background.png
+    - images/no-address.png
+    - images/no-payment.png
+    - images/no-services.png
+    - images/no-notifications.png
+    - images/default-user.png
 
   fonts:
     - family: PoppinsRegular
