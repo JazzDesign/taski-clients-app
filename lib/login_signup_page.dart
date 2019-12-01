@@ -1024,7 +1024,8 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
         await Firestore.instance.collection("users").document(userId).setData({
           'name': userInfo.displayName,
           'email': user.email,
-          'userType': 'consumer'
+          'userType': 'consumer',
+          'picture': ''
         });
 
         await widget.auth.sendEmailVerification();
@@ -1039,7 +1040,8 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
 
         await _showConfirmation(context);
 
-        Navigator.of(context).pop();
+//        Navigator.of(context).pop();
+        gotoLogin();
       } catch (e) {
         print('Error: $e');
         setState(() {

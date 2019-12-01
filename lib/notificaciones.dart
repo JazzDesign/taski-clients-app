@@ -34,7 +34,22 @@ class _NotificacionesState extends State<Notificaciones> {
         Container(
           margin: EdgeInsets.only(top: 200.0, right: 20.0, left: 20.0),
           child: SingleChildScrollView(
-            child: Text("Notificaciones"),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  child: Image.asset("images/no-notifications.png"),
+                ),
+                Center(
+                  child: Text(
+                    "Aun no tienes notificaciones.",
+                    style: TextStyle(
+                      fontFamily: "PoppinsRegular",
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ],

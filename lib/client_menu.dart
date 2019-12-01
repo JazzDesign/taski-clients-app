@@ -69,6 +69,7 @@ class _ClientMenuState extends State<ClientMenu> {
   DocumentSnapshot user;
   String userName = "";
   String userEmail = "";
+  String userPicture = "";
 
   Widget _widget;
 
@@ -87,7 +88,7 @@ class _ClientMenuState extends State<ClientMenu> {
                       shape: BoxShape.circle,
                       image: new DecorationImage(
                           fit: BoxFit.fill,
-                          image: AssetImage("images/json.jpg")))),
+                        image: user['picture'] != "" ? NetworkImage(user['picture']) : AssetImage("images/default-user.png")))),
               Container(
                   margin: EdgeInsets.only(left: 16),
                   child: Column(
@@ -131,6 +132,8 @@ class _ClientMenuState extends State<ClientMenu> {
         user = document;
         userName = document['name'];
         userEmail = document['email'];
+        userPicture = user['picture'];
+        print('foto = $userPicture');
         _widget = CategoryClient(user.documentID, userName, userEmail);
         print("name = $userName");
       });
@@ -171,11 +174,11 @@ class _ClientMenuState extends State<ClientMenu> {
                 } else if (itemId == 'notificaciones') {
                   setState(() => _widget = Notificaciones());
                 } else if (itemId == 'perfil') {
-                  setState(() => _widget = Perfil(userName, userEmail));
+                  setState(() => _widget = Perfil(widget._userId, userName, userEmail, userPicture));
                 } else if (itemId == 'direcciones') {
                   setState(() => _widget = Direcciones(widget._userId));
                 } else if (itemId == 'pagos') {
-                  setState(() => _widget = Payment());
+                  setState(() => _widget = Payment(widget._userId));
                 } else if (itemId == 'logout') {
                   widget.auth.signOut();
                   widget.onSignedOut();
