@@ -436,6 +436,7 @@ class _ServiceDescriptionState extends State<ServiceDescription> {
                                     .add({
                                   'address': _addressController.text,
                                   'description': _descriptionController.text,
+                                  'categoryId': widget._categoryId,
                                   'price': int.parse(_maxPay.text),
                                   'title': _titleController.text,
                                   'scheduled': _dateTime,

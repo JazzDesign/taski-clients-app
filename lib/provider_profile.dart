@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'full_screen_photo.dart';
 import 'services/profile_title.dart';
 
 class ProviderProfile extends StatefulWidget {
@@ -80,8 +81,7 @@ class _ProviderProfileState extends State<ProviderProfile> {
                           Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(50.0),
-                                border: Border.all(
-                                    width: 2.0)),
+                                border: Border.all(width: 2.0)),
                             child: CircleAvatar(
                               radius: 40.0,
                               backgroundImage: image as ImageProvider,
@@ -89,8 +89,7 @@ class _ProviderProfileState extends State<ProviderProfile> {
                           ),
                           Text(
                             user != null ? user['company'].toString() : "",
-                            style:
-                                TextStyle(fontSize: 20.0),
+                            style: TextStyle(fontSize: 20.0),
                           ),
                           Text(
                             user != null ? user['name'].toString() : "",
@@ -107,7 +106,10 @@ class _ProviderProfileState extends State<ProviderProfile> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     ProfileTile(
-                      title: "N/R",
+                      title: user != null &&
+                          (double.parse(user['ratingCount'].toString())) > 0
+                          ? (user['rating'] / user['ratingCount']).toString()
+                          : "N/R",
                       subtitle: "Rating",
                     ),
                     ProfileTile(
@@ -215,7 +217,15 @@ class _ProviderProfileState extends State<ProviderProfile> {
                                   itemCount: photos.length,
                                   itemBuilder: (context, index) => Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Image.network(photos[index]),
+                                    child: GestureDetector(
+                                      child: Image.network(photos[index]),
+                                      onTap: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (_) {
+                                          return FullScreenPhoto(photos[index]);
+                                        }));
+                                      },
+                                    ),
                                   ),
                                 ),
                         ),
