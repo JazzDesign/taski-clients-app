@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:taski_clients/service_description.dart';
 
+import 'chat.dart';
+import 'custom_float.dart';
 import 'finish_job.dart';
 import 'formatters.dart';
 import 'full_screen_photo.dart';
@@ -397,6 +399,22 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
           ),
         ],
       ),
+      floatingActionButton: document != null && document['provider'] != null
+          ? CustomFloat(
+              icon: Icons.chat,
+              qrCallback: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute<Chat>(
+                        builder: (context) => Chat(
+                            widget._userId, document['provider'].toString())));
+              },
+            )
+          : null,
+      floatingActionButtonLocation:
+          document != null && document['provider'] != null
+              ? FloatingActionButtonLocation.centerDocked
+              : null,
       bottomNavigationBar: (document != null &&
               (document['state'] == 'FINISHED' || document['state'] == 'DONE')
           ? BottomAppBar(
