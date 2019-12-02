@@ -75,7 +75,13 @@ class _FinishJobState extends State<FinishJob> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Revisar trabajo'),
+        title: Text(
+            'Revisar trabajo',
+          style: TextStyle(
+            fontFamily: "PoppinsRegular",
+            fontWeight: FontWeight.bold
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -198,7 +204,19 @@ class _FinishJobState extends State<FinishJob> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         OutlineButton(
-                          child: Text('Rechazar'),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(30.0)),
+                          textColor: Color(0xff2a7de1),
+                          color: Color(0xff2a7de1),
+                          padding: const EdgeInsets.only(
+                              top: 20.0,
+                              right: 20.0,
+                              left: 20.0,
+                              bottom: 20.0),
+                          child: Text(
+                              'Rechazar',
+                            style: TextStyle(fontFamily: "PoppinsRegular"),
+                          ),
                           onPressed: () {
                             setState(() {
                               isRejected = true;
@@ -206,7 +224,19 @@ class _FinishJobState extends State<FinishJob> {
                           },
                         ),
                         RaisedButton(
-                          child: Text('Aceptar'),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(30.0)),
+                          textColor: Colors.white,
+                          color: Color(0xff2a7de1),
+                          padding: const EdgeInsets.only(
+                              top: 20.0,
+                              right: 20.0,
+                              left: 20.0,
+                              bottom: 20.0),
+                          child: Text(
+                              'Aceptar',
+                            style: TextStyle(fontFamily: "PoppinsRegular"),
+                          ),
                           onPressed: () {
                             widget.document.reference.setData({'state': 'DONE'},
                                 merge: true).then((snapshot1) {

@@ -51,7 +51,13 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
     final Color primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles de trabajo'),
+        title: Text(
+            'Detalles de trabajo',
+          style: TextStyle(
+              fontFamily: "PoppinsRegular",
+              fontWeight: FontWeight.bold
+          ),
+        ),
       ),
       body: Stack(
         fit: StackFit.expand,
