@@ -54,11 +54,9 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            'Detalles de trabajo',
+          'Detalles de trabajo',
           style: TextStyle(
-              fontFamily: "PoppinsRegular",
-              fontWeight: FontWeight.bold
-          ),
+              fontFamily: "PoppinsRegular", fontWeight: FontWeight.bold),
         ),
       ),
       body: Stack(
@@ -419,7 +417,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
           : null,
       floatingActionButtonLocation:
           document != null && document['provider'] != null
-              ? FloatingActionButtonLocation.centerDocked
+              ? FloatingActionButtonLocation.endDocked
               : null,
       bottomNavigationBar: (document != null &&
               (document['state'] == 'FINISHED' || document['state'] == 'DONE')
