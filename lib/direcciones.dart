@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'direcciones_edit.dart';
 import 'header_clip.dart';
 
 class Direcciones extends StatefulWidget {
@@ -181,6 +182,13 @@ class _DireccionesState extends State<Direcciones> {
             Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),
             onTap: () {
               print("Ver mas");
+              print(document.documentID);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DireccionesEdit(widget.userId, document.documentID),)
+//                          MaterialPageRoute(builder: (context) => ServiceDescription()),
+              );
             },
           ),
         ),
